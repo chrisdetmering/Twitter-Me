@@ -1,0 +1,28 @@
+{
+  "name": "twitter-me",
+  "version": "1.0.0",
+  "description": "A Twitter clone built using React Hooks and Express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisdetmering/Twitter-Me.git"
+  },
+  "keywords": [
+    "React",
+    "Express",
+    "Node"
+  ],
+  "author": "Chris Detmering",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisdetmering/Twitter-Me/issues"
+  },
+  "homepage": "https://github.com/chrisdetmering/Twitter-Me#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
