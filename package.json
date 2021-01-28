@@ -1,6 +1,9 @@
 {
   "name": "twitter-me",
   "version": "1.0.0",
+  "engines": {
+    "node": "v12.18.3"
+  }, 
   "description": "A Twitter clone built using React Hooks and Express",
   "main": "index.js",
   "scripts": {
