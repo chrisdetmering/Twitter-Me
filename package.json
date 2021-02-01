@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "v12.18.3"
-  }, 
+  },
   "description": "A Twitter clone built using React Hooks and Express",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/chrisdetmering/Twitter-Me#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react-router-dom": "^5.2.0"
   }
 }
