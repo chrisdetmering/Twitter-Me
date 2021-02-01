@@ -4,11 +4,11 @@ import {
 } from "react-router-dom"; 
 
 export default function ProtectedRoute(props) { 
-  const { children } = props; 
+  const { children, loggedIn } = props; 
   return( 
     <Route
       render={({location}) => 
-        localStorage.getItem("user") ? ( 
+        loggedIn ? ( 
           children
         ) : ( 
           <Redirect 

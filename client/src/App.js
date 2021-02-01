@@ -11,17 +11,22 @@ import ProtectedRoute from "./Components/Util/Auth/ProtectedRoute";
 import './App.css';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false); 
+
+
+
+
   return (
     <Router>
         <Switch>
           <Route exact path="/">
-            <Login/>
+            <Login login={setLoggedIn}/>
           </Route>
-          <ProtectedRoute exact path="/home">
-            <Home/>
+          <ProtectedRoute exact path="/home" loggedIn={loggedIn} >
+            <Home setLoggedIn={setLoggedIn}/>
           </ProtectedRoute>
-          <ProtectedRoute exact path="/profile">
-            <Profile/>
+          <ProtectedRoute exact path="/profile" loggedIn={loggedIn} >
+            <Profile setLoggedIn={setLoggedIn}/>
           </ProtectedRoute>
         </Switch>
     </Router>);
