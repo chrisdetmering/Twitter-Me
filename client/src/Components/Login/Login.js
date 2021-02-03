@@ -11,5 +11,6 @@ export default function Login(props) {
 
   return(<>
     <button onClick={handleClick}>Login</button>
+    <button>Sign in with Twitter</button>
   </>); 
 }

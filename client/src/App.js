@@ -14,8 +14,6 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false); 
 
 
-
-
   return (
     <Router>
         <Switch>
