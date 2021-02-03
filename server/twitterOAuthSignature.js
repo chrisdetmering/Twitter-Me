@@ -129,7 +129,11 @@ const createSignedHeader = () => {
   return createAuthorizationHeader(oauthOnce, timeStamp, signature); 
 }
 
+//Util function 
 
+const parseOAuthToken = (responseString) => { 
+  return responseString.split("&")[0].split("=")[1];
+}
 
 
 module.exports = {
@@ -139,5 +143,6 @@ module.exports = {
   createSignatureBaseString, 
   createSignature,
   createAuthorizationHeader, 
-  createSignedHeader
+  createSignedHeader, 
+  parseOAuthToken
  }
