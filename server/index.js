@@ -18,44 +18,20 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 const getAuthToken = (response) => { 
   const xhr = new XMLHttpRequest();
 
-  
-
-  //setting headers 
   xhr.open("POST", "https://api.twitter.com/oauth/request_token");
-  try { 
-    const AuthorizationHeaderString = createSignedHeader();  
-     xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  } catch(e) { 
-    response.send(`Error: ${e}`); 
-  }
   
-
-
-  xhr.onreadystatechange = function() { 
-   
-    if(xhr.readyState === 4) { 
-      response.send(xhr)
-    }
-    
-  }
-
-
-  //checking for errors and then sending if there are errors
-  xhr.onerror = function() { 
-      response.send(xhr)
-  }
+  const AuthorizationHeaderString = createSignedHeader();  
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+ 
+  xhr.addEventListener("load", function() { 
+    const oauthToken = parseOAuthToken(this.responseText); 
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
+    response.location(url);
+    response.status(302); 
+    response.send(oauthToken); 
+  })
 
   xhr.send(); 
-  // request.addEventListener("load", function() { 
-  //   const oauthToken = parseOAuthToken(this.responseText); 
-  //   // const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
-  //   // res.location(url);
-  //   // res.status(302); 
-  //   response.send(oauthToken); 
-  // })
-  
-  
-  
 }
 
 
