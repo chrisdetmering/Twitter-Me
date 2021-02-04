@@ -35,10 +35,14 @@ const getAuthToken = (response) => {
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
-    getAuthToken(res); 
-  
-  
-  
+    // getAuthToken(res); 
+    const xhr = new XMLHttpRequest(); 
+
+    xhr.open("GET", "https://swapi.dev/api/people/1")
+    xhr.addEventListener("load", function() { 
+      res.send(this.responseText); 
+    })
+    xhr.send(); 
   // const request = new XMLHttpRequest();
   // request.open("POST", "https://api.twitter.com/oauth/request_token");
 
