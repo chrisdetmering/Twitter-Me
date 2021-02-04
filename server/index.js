@@ -16,8 +16,8 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
-  // const request = new XMLHttpRequest();
-  // request.open("POST", "https://api.twitter.com/oauth/request_token");
+  const request = new XMLHttpRequest();
+  request.open("POST", "https://api.twitter.com/oauth/request_token");
 
   // //TODO: Handle errors
   // request.addEventListener("error", event => { 
@@ -32,14 +32,12 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
   //   res.send(); 
   // })
 
-  // const AuthorizationHeaderString = createSignedHeader(); 
-  // request.setRequestHeader("Authorization", AuthorizationHeaderString);
+  const AuthorizationHeaderString = createSignedHeader(); 
+  request.setRequestHeader("Authorization", AuthorizationHeaderString);
 
-  // request.send(); 
+  request.send(); 
   res.send('sign in with twitter')
 })
-
-
 
 
 
@@ -48,14 +46,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'build', 'index.html')); 
 })
 
-
-
-
-
-
-app.get('/api/tweet', (req, res) => { 
-  res.send('tweet'); 
-})
 
 
 app.listen(PORT, () => console.log(`Server Listening on ${PORT} `)); 
