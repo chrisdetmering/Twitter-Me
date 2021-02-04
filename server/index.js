@@ -16,33 +16,58 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 
 const getAuthToken = (response) => { 
-  const request = new XMLHttpRequest();
-  request.open("POST", "https://api.twitter.com/oauth/request_token");
-  const AuthorizationHeaderString = createSignedHeader(); 
-  request.setRequestHeader("Authorization", AuthorizationHeaderString);
+  const xhr = new XMLHttpRequest();
 
-  request.addEventListener("load", function() { 
-    const oauthToken = parseOAuthToken(this.responseText); 
-    // const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
-    // res.location(url);
-    // res.status(302); 
-    response.send(oauthToken); 
-  })
+  
+
+  //setting headers 
+  xhr.open("POST", "https://api.twitter.com/oauth/request_token");
+  const AuthorizationHeaderString = createSignedHeader(); 
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+
+
+  xhr.onreadystatechange = function() { 
+   
+    if(xhr.readyState === 4) { 
+      response.send(xhr)
+    }
+    
+  }
+
+
+  //checking for errors and then sending if there are errors
+  xhr.onerror = function() { 
+      response.send(xhr)
+  }
+
+  xhr.send(); 
+  // request.addEventListener("load", function() { 
+  //   const oauthToken = parseOAuthToken(this.responseText); 
+  //   // const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
+  //   // res.location(url);
+  //   // res.status(302); 
+  //   response.send(oauthToken); 
+  // })
   
   
-  request.send(); 
+  
 }
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
-    // getAuthToken(res); 
-    const xhr = new XMLHttpRequest(); 
+    getAuthToken(res); 
 
-    xhr.open("GET", "https://swapi.dev/api/people/1")
-    xhr.addEventListener("load", function() { 
-      res.send(this.responseText); 
-    })
-    xhr.send(); 
+
+    //SWAPI DEV
+    // const xhr = new XMLHttpRequest(); 
+
+    // xhr.open("GET", "https://swapi.dev/api/people/1")
+    // xhr.addEventListener("load", function() { 
+    //   res.send(this.responseText); 
+    // })
+    // xhr.send(); 
+
+  // TWITTER API 
   // const request = new XMLHttpRequest();
   // request.open("POST", "https://api.twitter.com/oauth/request_token");
 
