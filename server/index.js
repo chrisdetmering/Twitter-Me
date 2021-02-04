@@ -22,8 +22,8 @@ const getAuthToken = (response) => {
 
   //setting headers 
   xhr.open("POST", "https://api.twitter.com/oauth/request_token");
-  // const AuthorizationHeaderString = createSignedHeader(); 
-  // xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+  const AuthorizationHeaderString = createSignedHeader(); 
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
 
 
   xhr.onreadystatechange = function() { 
