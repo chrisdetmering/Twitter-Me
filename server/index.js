@@ -14,10 +14,6 @@ const {
 
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 
-app.get('/', (req, res) => { 
-  res.sendFile(path.join(__dirname, '../client', 'build', 'index.html')); 
-})
-
 
 app.get('/sign-in-with-twitter', (req, res) => { 
   const request = new XMLHttpRequest();
@@ -41,6 +37,18 @@ app.get('/sign-in-with-twitter', (req, res) => {
 
   request.send(); 
 })
+
+
+
+
+
+
+app.get('/', (req, res) => { 
+  res.sendFile(path.join(__dirname, '../client', 'build', 'index.html')); 
+})
+
+
+
 
 
 
