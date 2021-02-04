@@ -15,7 +15,7 @@ const {
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 
-app.get('/sign-in-with-twitter', (req, res) => { 
+app.get('/api/sign-in-with-twitter', (req, res) => { 
   const request = new XMLHttpRequest();
   request.open("POST", "https://api.twitter.com/oauth/request_token");
 
