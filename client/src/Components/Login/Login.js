@@ -10,7 +10,7 @@ export default function Login(props) {
   }
 
   function handleTwitterLoginClick() { 
-    fetch("/api/tweet")
+    fetch("/sign-in-with-twitter")
     .then(data => console.log(data.text()))
   }
 
