@@ -15,7 +15,8 @@ const {
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 
-const getAuthToken = (response) => { 
+
+app.get('/api/sign-in-with-twitter', (req, res) => { 
   const xhr = new XMLHttpRequest();
 
   xhr.open("POST", "https://api.twitter.com/oauth/request_token");
@@ -26,62 +27,22 @@ const getAuthToken = (response) => {
   xhr.addEventListener("load", function() { 
     const oauthToken = parseOAuthToken(this.responseText); 
     const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
-    response.location(url);
-    response.status(302); 
-    response.send(oauthToken); 
+  
+    res.send(url); 
   })
 
   xhr.send(); 
-}
-
-
-app.get('/api/sign-in-with-twitter', (req, res) => { 
-    getAuthToken(res); 
-
-
-    //SWAPI DEV
-    // const xhr = new XMLHttpRequest(); 
-
-    // xhr.open("GET", "https://swapi.dev/api/people/1")
-    // xhr.addEventListener("load", function() { 
-    //   res.send(this.responseText); 
-    // })
-    // xhr.send(); 
-
-  // TWITTER API 
-  // const request = new XMLHttpRequest();
-  // request.open("POST", "https://api.twitter.com/oauth/request_token");
-
-  // //TODO: Handle errors
-  // request.addEventListener("error", event => { 
-  //   console.log("an error occurred");
-  // })
-
-  // request.addEventListener("load", function() { 
-  //   const oauthToken = parseOAuthToken(this.responseText); 
-  //   const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
-  //   res.location(url);
-  //   res.status(302); 
-  //   res.send(); 
-  // })
-
-  // const AuthorizationHeaderString = createSignedHeader(); 
-  // request.setRequestHeader("Authorization", AuthorizationHeaderString);
-
-  // request.send(); 
-  // res.send('sign in with twitter')
 })
 
 
-
-
-
+app.get("/api/access-token", (req, res) => { 
+  res.send(req.query); 
+})
 
 
 app.get('/', (req, res) => { 
   res.sendFile(path.join(__dirname, '../client', 'build', 'index.html')); 
 })
-
 
 
 app.listen(PORT, () => console.log(`Server Listening on ${PORT} `)); 

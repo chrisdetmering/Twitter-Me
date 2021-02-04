@@ -8,6 +8,7 @@ import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home"; 
 import Profile from "./Components/Profile/Profile"; 
 import ProtectedRoute from "./Components/Util/Auth/ProtectedRoute"; 
+import GettingCredentials from "./Components/Util/Auth/GettingCredentials"; 
 import './App.css';
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Login login={setLoggedIn}/>
+          </Route>
+          <Route exact path="/getting-credentials"> 
+            <GettingCredentials login={setLoggedIn}/>
           </Route>
           <ProtectedRoute exact path="/home" loggedIn={loggedIn} >
             <Home setLoggedIn={setLoggedIn}/>

@@ -118,6 +118,9 @@ const createAuthorizationHeader = (oauthOnce, timeStamp, signature) => {
   `"${percentEncode(process.env.OAUTH_VERSION)}"`
 };
 
+const createAuthorizationHeaderV2 = (oauthOnce, timeStamp, )
+
+
 //This does all the work for you of creating a signed header for Twitter
 const createSignedHeader = () => { 
   const timeStamp = createTimeStamp(); 
@@ -127,13 +130,18 @@ const createSignedHeader = () => {
   const signatureBaseString = createSignatureBaseString(parameterString); 
   const signature = createSignature(signingKey, signatureBaseString);
   return createAuthorizationHeader(oauthOnce, timeStamp, signature); 
-}
+};
+
+
+
+
 
 //Util function 
 
 const parseOAuthToken = (responseString) => { 
   return responseString.split("&")[0].split("=")[1];
-}
+};
+
 
 
 module.exports = {
