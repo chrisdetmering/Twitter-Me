@@ -26,7 +26,7 @@ const getAuthToken = (response) => {
     const AuthorizationHeaderString = createSignedHeader(); 
    xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
   } catch(e) { 
-    response.send(e); 
+    response.send(`Error: ${e}`); 
   }
   
 
