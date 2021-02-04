@@ -16,26 +16,27 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
-  const request = new XMLHttpRequest();
-  request.open("POST", "https://api.twitter.com/oauth/request_token");
+  // const request = new XMLHttpRequest();
+  // request.open("POST", "https://api.twitter.com/oauth/request_token");
 
-  //TODO: Handle errors
-  request.addEventListener("error", event => { 
-    console.log("an error occurred");
-  })
+  // //TODO: Handle errors
+  // request.addEventListener("error", event => { 
+  //   console.log("an error occurred");
+  // })
 
-  request.addEventListener("load", function() { 
-    const oauthToken = parseOAuthToken(this.responseText); 
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
-    res.location(url);
-    res.status(302); 
-    res.send(); 
-  })
+  // request.addEventListener("load", function() { 
+  //   const oauthToken = parseOAuthToken(this.responseText); 
+  //   const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
+  //   res.location(url);
+  //   res.status(302); 
+  //   res.send(); 
+  // })
 
-  const AuthorizationHeaderString = createSignedHeader(); 
-  request.setRequestHeader("Authorization", AuthorizationHeaderString);
+  // const AuthorizationHeaderString = createSignedHeader(); 
+  // request.setRequestHeader("Authorization", AuthorizationHeaderString);
 
-  request.send(); 
+  // request.send(); 
+  res.send('sign in with twitter')
 })
 
 
