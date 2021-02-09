@@ -1,4 +1,4 @@
-
+const percentEncode = require("./percentEncode"); 
 //goal order
 // "oauth_callback"
 // "oauth_consumer_key"
@@ -7,15 +7,25 @@
 // "oauth_timestamp"
 // "oauth_version"
 
-const headers = [ 
-  "oauth_version", 
-  "oauth_consumer_key",
+const headers = [ { key:"oauth_version", value:"" } ,
+  {key:"oauth_consumer_key", value:""},
   
-  "oauth_signature_method",
-  "oauth_timestamp", 
+  {key:"oauth_signature_method", value:""},
+  {key:"oauth_timestamp", value:""},
   
-  "oauth_callback",
-  "oauth_nonce",
-]; 
+  {key:"oauth_callback", value:""},
+  {key:"oauth_nonce", value:"" }]; 
 
-console.log(headers.sort()); 
+const sorted = headers.sort((a, b) => { 
+  console.log()
+  if (percentEncode(a.key) > percentEncode(b.key)) { 
+    return 1;
+  }
+  if (percentEncode(a.key) < percentEncode(b.key)) { 
+    return -1; 
+  } 
+  return 0; 
+
+} ); 
+
+console.log(sorted); 

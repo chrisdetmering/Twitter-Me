@@ -18,10 +18,15 @@ app.use(express.static(path.join(__dirname, '../client', 'build')));
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
   const xhr = new XMLHttpRequest();
+  const requestUrl = "https://api.twitter.com/oauth/request_token"; 
+  const parameters = [ 
+    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
+    {key:"oauth_callback", value: process.env.OAUTH_CALLBACK}
+  ]; 
 
-  xhr.open("POST", "https://api.twitter.com/oauth/request_token");
+  xhr.open("POST", requestUrl);
   
-  const AuthorizationHeaderString = createSignedHeader();  
+  const AuthorizationHeaderString = createSignedHeader(parameters, requestUrl);  
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
  
   xhr.addEventListener("load", function() { 

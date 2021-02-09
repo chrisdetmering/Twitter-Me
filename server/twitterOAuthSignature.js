@@ -30,20 +30,58 @@ const createOAuthOnce = () => {
 // 6) Append the encoded value to the output string.
 // 7) If there are more key/value pairs remaining, append a ‘&’ character to the output string.
 
-const createParameterString = (oauthOnce, oauthTimeStamp) => { 
-  return percentEncode("oauth_callback") + "=" +
-  percentEncode(process.env.OAUTH_CALLBACK) + '&' +
-  percentEncode("oauth_consumer_key") + '=' +
-  percentEncode(process.env.OAUTH_CONSUMER_KEY) + '&' + 
-  percentEncode("oauth_nonce") + '=' + 
-  percentEncode(oauthOnce) + '&' + 
-  percentEncode("oauth_signature_method")  + '=' + 
-  percentEncode(process.env.OAUTH_SIGNATURE_METHOD) + '&' +
-  percentEncode("oauth_timestamp") + "=" + 
-  percentEncode(oauthTimeStamp) + "&" +  
-  percentEncode("oauth_version") + "=" + 
-  percentEncode(process.env.OAUTH_VERSION);
+// const createParameterString = (oauthOnce, oauthTimeStamp) => { 
+//   return percentEncode("oauth_callback") + "=" +
+//   percentEncode(process.env.OAUTH_CALLBACK) + '&' +
+//   percentEncode("oauth_consumer_key") + '=' +
+//   percentEncode(process.env.OAUTH_CONSUMER_KEY) + '&' + 
+//   percentEncode("oauth_nonce") + '=' + 
+//   percentEncode(oauthOnce) + '&' + 
+//   percentEncode("oauth_signature_method")  + '=' + 
+//   percentEncode(process.env.OAUTH_SIGNATURE_METHOD) + '&' +
+//   percentEncode("oauth_timestamp") + "=" + 
+//   percentEncode(oauthTimeStamp) + "&" +  
+//   percentEncode("oauth_version") + "=" + 
+//   percentEncode(process.env.OAUTH_VERSION);
+// };
+
+
+
+
+const sortParameters = (parameters) => { 
+  return parameters.sort((a, b) => { 
+    if (percentEncode(a.key) > percentEncode(b.key)) { 
+      return 1;
+    }
+    if (percentEncode(a.key) < percentEncode(b.key)) { 
+      return -1; 
+    } 
+    return 0; 
+  })
+}
+
+
+const createParameterString = (oauthOnce, oauthTimeStamp, parameters) => { 
+  const defaultParams = [
+    {key:"oauth_timestamp", value: oauthTimeStamp}, 
+    {key:"oauth_nonce", value: oauthOnce }, 
+    {key:"oauth_version", value: process.env.OAUTH_VERSION }, 
+    {key:"oauth_signature_method", value: process.env.OAUTH_SIGNATURE_METHOD},
+  ]
+
+  const collectedParameters = defaultParams.concat(parameters); 
+  const sorted = sortParameters(collectedParameters)
+  const appendEquals = sorted.map(param => { 
+    return `${percentEncode(param.key)}=${percentEncode(param.value)}`; 
+  })
+  
+  const appendAmpersand = appendEquals.join("&"); 
+  return appendAmpersand; 
 };
+
+
+
+
 
 //createSignaturebaseString
 // The three values collected so far must be joined to make a single string,
@@ -59,10 +97,8 @@ const createParameterString = (oauthOnce, oauthTimeStamp) => {
 // 4) Append the ‘&’ character to the output string.
 // 5) Percent encode the parameter string and append it to the output string.
 
-const createSignatureBaseString = (parameterString) => { 
-  return "POST" + "&" + 
-  percentEncode("https://api.twitter.com/oauth/request_token") + "&" + 
-  percentEncode(parameterString);
+const createSignatureBaseString = (parameterString, requestUrl) => { 
+  return `POST&${percentEncode(requestUrl)}&${percentEncode(parameterString)}`;
 };
 
 // createSigningKey
@@ -99,37 +135,37 @@ const createSignature = (singingKey, signatureBaseString) => {
 // Percent encode the value and append it to DST.
 // Append a double quote ‘”’ to DST.
 // If there are key/value pairs remaining, append a comma ‘,’ and a space ‘ ‘ to DST.
+const createAuthorizationHeader = (oauthOnce, timeStamp, signature, params) => { 
+  const defaultParams = [
+    {key:"oauth_timestamp", value: timeStamp}, 
+    {key:"oauth_nonce", value: oauthOnce }, 
+    {key:"oauth_version", value: process.env.OAUTH_VERSION }, 
+    {key:"oauth_signature_method", value: process.env.OAUTH_SIGNATURE_METHOD},
+    {key:"oauth_signature", value: signature}
+  ]
 
-const createAuthorizationHeader = (oauthOnce, timeStamp, signature) => { 
-  return "OAuth " +
-  percentEncode("oauth_callback") + "=" + 
-  `"${percentEncode(process.env.OAUTH_CALLBACK)}"` + ', ' +
-  percentEncode("oauth_consumer_key") + '=' + 
-  `"${percentEncode(process.env.OAUTH_CONSUMER_KEY)}"` + ', ' + 
-  percentEncode("oauth_nonce") + '=' + 
-  `"${percentEncode(oauthOnce)}"` + ', ' + 
-  percentEncode("oauth_signature") + '=' + 
-  `"${percentEncode(signature)}"` + ', ' + 
-  percentEncode("oauth_signature_method") + '=' + 
-  `"${percentEncode(process.env.OAUTH_SIGNATURE_METHOD)}"` + ', ' + 
-  percentEncode("oauth_timestamp") + '=' + 
-  `"${percentEncode(timeStamp)}"` + ', ' + 
-  percentEncode("oauth_version") + '=' + 
-  `"${percentEncode(process.env.OAUTH_VERSION)}"`
+  const collectedParameters = defaultParams.concat(params); 
+
+  const sorted = sortParameters(collectedParameters)
+  const appendEquals = sorted.map(param => { 
+    return `${percentEncode(param.key)}="${percentEncode(param.value)}"`; 
+  })
+
+  const appendCommasAndSpaces = appendEquals.join(', '); 
+  const fullAuthHeader = "OAuth " + appendCommasAndSpaces; 
+  return fullAuthHeader; 
 };
-
-const createAuthorizationHeaderV2 = (oauthOnce, timeStamp, )
 
 
 //This does all the work for you of creating a signed header for Twitter
-const createSignedHeader = () => { 
+const createSignedHeader = (parameters, requestUrl) => { 
   const timeStamp = createTimeStamp(); 
   const oauthOnce = createOAuthOnce();  
-  const parameterString = createParameterString(oauthOnce, timeStamp); 
+  const parameterString = createParameterString(oauthOnce, timeStamp, parameters); 
+  const signatureBaseString = createSignatureBaseString(parameterString, requestUrl); 
   const signingKey = createSigningKey(); 
-  const signatureBaseString = createSignatureBaseString(parameterString); 
   const signature = createSignature(signingKey, signatureBaseString);
-  return createAuthorizationHeader(oauthOnce, timeStamp, signature); 
+  return createAuthorizationHeader(oauthOnce, timeStamp, signature, parameters); 
 };
 
 
