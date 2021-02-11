@@ -1,5 +1,5 @@
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-const cookieSession = require('cookie-session'); 
+const cookieParser = require('cookie-parser');
 const express = require("express"); 
 const path = require("path"); 
 const app = express(); 
@@ -11,12 +11,7 @@ const {
 
 
 app.use(express.static(path.join(__dirname, '../client', 'build')));
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1'], 
-  maxAge: 24 * 60 * 60 * 1000 
-}))
-
+app.use(cookieParser()); 
 
 //TODO: Refactor these endpoints to use a more general function for interacting with Twitter
 app.get('/api/sign-in-with-twitter', (req, res) => { 
@@ -65,7 +60,7 @@ app.get("/api/access-token", (req, res) => {
   xhr.addEventListener("load", function() { 
     const oauthParams = parseOAuthParams(this.responseText); 
 
-    
+    res.header('Set-Cookie', `auth=${this.responseText};`);
     
     res.json(oauthParams); 
   })
@@ -75,9 +70,7 @@ app.get("/api/access-token", (req, res) => {
 
 
 app.get("/api/profile-picture", (req, res) => { 
-  console.log(req.session);
-
-
+  console.log(req.headers);
   const userId = req.query.user_id;
   const xhr = new XMLHttpRequest();
   const requestUrl = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
@@ -115,17 +108,13 @@ app.get("/api/home-timeline", (req, res) => {
   xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
   xhr.addEventListener("load", function() { 
+    console.log(req.headers.cookie);
    res.json(JSON.parse(this.responseText)); 
   })
 
   xhr.send(); 
 })
 
-//error causes 
-//1. old consumer tokens (nope regenerated) 
-//2. not passing in oauthTokenSecret (passed in)
-//3. not doing the while signing process correctly? (not sure here. I can login with twitter)
-//4. What else? 
 
 
 

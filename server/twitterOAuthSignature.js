@@ -170,7 +170,10 @@ const parseOAuthParams = (responseString) => {
   return OAuthParams; 
 };
 
+const parseCookies = (cookies) => { 
+  
 
+}
 
 module.exports = {
   createOAuthOnce, 
