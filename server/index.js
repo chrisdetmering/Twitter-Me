@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 8080; 
 const { 
   createSignedHeader, 
-  parseOAuthTokens
+  parseOAuthParams
   } = require("./twitterOAuthSignature"); 
 
 
@@ -30,8 +30,8 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
  
   xhr.addEventListener("load", function() { 
-    const [oauthToken] = parseOAuthTokens(this.responseText, ["oauth_token"]); 
-    const oauthTokenValue = oauthToken.value; 
+    const oauthParams = parseOAuthParams(this.responseText); 
+    const oauthTokenValue = oauthParams["oauth_token"]; 
 
     const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
   
@@ -60,10 +60,10 @@ app.get("/api/access-token", (req, res) => {
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
  
   xhr.addEventListener("load", function() { 
-    const oauthTokens = parseOAuthTokens(this.responseText); 
+    const oauthParams = parseOAuthParams(this.responseText); 
     //TODO: handle This feature is temporarily unavailable 
 
-    res.json(oauthTokens); 
+    res.json(oauthParams); 
   })
 
   xhr.send(oauthVerifier); 

@@ -8,12 +8,12 @@ import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home"; 
 import Profile from "./Components/Profile/Profile"; 
 import ProtectedRoute from "./Components/Util/Auth/ProtectedRoute"; 
-import GettingCredentials from "./Components/Util/Auth/GettingCredentials"; 
+import GetCredentials from "./Components/Util/Auth/GetCredentials"; 
 import './App.css';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); 
-
+  const [credentials, setCredentials] = useState([]); 
 
   return (
     <Router>
@@ -21,14 +21,14 @@ function App() {
           <Route exact path="/">
             <Login login={setLoggedIn}/>
           </Route>
-          <Route exact path="/getting-credentials"> 
-            <GettingCredentials login={setLoggedIn}/>
+          <Route exact path="/get-credentials"> 
+            <GetCredentials login={setLoggedIn} setCredentials={setCredentials}/>
           </Route>
           <ProtectedRoute exact path="/home" loggedIn={loggedIn} >
-            <Home setLoggedIn={setLoggedIn}/>
+            <Home setLoggedIn={setLoggedIn} credentials={credentials}/>
           </ProtectedRoute>
           <ProtectedRoute exact path="/profile" loggedIn={loggedIn} >
-            <Profile setLoggedIn={setLoggedIn}/>
+            <Profile setLoggedIn={setLoggedIn} credentials={credentials}/>
           </ProtectedRoute>
         </Switch>
     </Router>);

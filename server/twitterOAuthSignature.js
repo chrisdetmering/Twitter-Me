@@ -180,20 +180,18 @@ const createSignedHeader = (parameters, requestUrl) => {
 
 
 
-const parseOAuthTokens= (responseString, keys = []) => { 
+const parseOAuthParams = (responseString) => { 
+  const OAuthParams = {}; 
+  
   const params = responseString.split("&");
-  const paramsKeysAndValues = params.map((param) => { 
-    const keyAndValue = param.split("="); 
-    const key = keyAndValue[0]; 
-    const value = keyAndValue[1]; 
-    return {key, value}
+  params.forEach((param) => { 
+    const queryParams = param.split("="); 
+    const queryKey = queryParams[0]; 
+    const queryValue = queryParams[1]; 
+    OAuthParams[queryKey] = queryValue;
   })
 
-  if (keys.length === 0) { 
-    return paramsKeysAndValues; 
-  } 
-
-  return paramsKeysAndValues.filter(param => keys.includes(param.key) ); 
+  return OAuthParams; 
 };
 
 
@@ -206,5 +204,5 @@ module.exports = {
   createSignature,
   createAuthorizationHeader, 
   createSignedHeader,  
-  parseOAuthTokens
+  parseOAuthParams
  }

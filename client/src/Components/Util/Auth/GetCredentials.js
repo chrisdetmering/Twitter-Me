@@ -4,7 +4,7 @@ import {
   useLocation
 } from "react-router-dom"; 
 
-export default function GettingCredentials(props) { 
+export default function GetCredentials(props) { 
   const location = useLocation(); 
   const history = useHistory(); 
   const params = new URLSearchParams(location.search);
@@ -17,12 +17,12 @@ export default function GettingCredentials(props) {
     .then(data => data.json())
     .then(response => {
       //TODO: figure out where to save oauth_token_secret & oauth_token 
-      
-      response.forEach(oauthParams => {
-        localStorage.setItem(oauthParams.key, oauthParams.value)
-      });
-      props.login(true); 
-      history.push('/home'); 
+      console.log(response); 
+      // response.forEach(oauthParams => {
+      //   localStorage.setItem(oauthParams.key, oauthParams.value)
+      // });
+      // props.login(true); 
+      // history.push('/home'); 
     })
     .catch(error => console.log(`Network error: ${error}`)); 
   }, [oauthToken, oauthVerifier])
