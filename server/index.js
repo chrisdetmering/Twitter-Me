@@ -5,9 +5,9 @@ const app = express();
 const PORT = process.env.PORT || 8080; 
 const { 
   createSignedHeader, 
-  parseOAuthToken
+  parseOAuthTokens
   } = require("./twitterOAuthSignature"); 
-  const percentEncode = require("./percentEncode"); 
+
 
 
 
@@ -30,8 +30,10 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
  
   xhr.addEventListener("load", function() { 
-    const oauthToken = parseOAuthToken(this.responseText); 
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthToken}` 
+    const [oauthToken] = parseOAuthTokens(this.responseText, ["oauth_token"]); 
+    const oauthTokenValue = oauthToken.value; 
+
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
   
     res.send(url); 
   })
@@ -41,7 +43,30 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
 
 
 app.get("/api/access-token", (req, res) => { 
-  res.send(req.query); 
+  const oauthToken = req.query.oauth_token; 
+  const oauthVerifier = `oauth_verifier=${req.query.oauth_verifier}`; 
+  const xhr = new XMLHttpRequest();
+  const requestUrl = "https://api.twitter.com/oauth/access_token"; 
+  const parameters = [ 
+    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
+    {key:"oauth_token", value: oauthToken}
+  ]; 
+
+  
+  xhr.open("POST", requestUrl);
+  
+  const AuthorizationHeaderString = createSignedHeader(parameters, requestUrl);  
+  xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+ 
+  xhr.addEventListener("load", function() { 
+    const oauthTokens = parseOAuthTokens(this.responseText); 
+    //TODO: handle This feature is temporarily unavailable 
+
+    res.json(oauthTokens); 
+  })
+
+  xhr.send(oauthVerifier); 
 })
 
 

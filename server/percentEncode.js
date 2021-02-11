@@ -9,7 +9,6 @@ const ASCII_CHARACTERS = [
 
 const percentEncode = (string) => { 
   let encodedString = ''; 
-
   string.split("").forEach(char => {
       if (ASCII_CHARACTERS.includes(char)) { 
         encodedString += char; 
@@ -21,5 +20,7 @@ const percentEncode = (string) => {
 
   return encodedString; 
 }
+
+console.log(percentEncode('')); 
 
 module.exports = percentEncode; 

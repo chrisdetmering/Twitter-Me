@@ -105,8 +105,9 @@ const createSignatureBaseString = (parameterString, requestUrl) => {
 // the signing key should consist of the 
 // percent encoded consumer secret followed by an ampersand character ‘&’.
 
-const createSigningKey = () => { 
-  return percentEncode(process.env.CONSUMER_SECRET) + '&';
+const createSigningKey = (oauthTokenSecret = '') => { 
+  //process.env.CONSUMER_SECRET
+  return percentEncode(process.env.CONSUMER_SECRET) + '&' + percentEncode(oauthTokenSecret);
 };
 
 // createSignature
@@ -159,23 +160,40 @@ const createAuthorizationHeader = (oauthOnce, timeStamp, signature, params) => {
 
 //This does all the work for you of creating a signed header for Twitter
 const createSignedHeader = (parameters, requestUrl) => { 
-  const timeStamp = createTimeStamp(); 
-  const oauthOnce = createOAuthOnce();  
+  const timeStamp = createTimeStamp();
+  const oauthOnce = createOAuthOnce();
   const parameterString = createParameterString(oauthOnce, timeStamp, parameters); 
   const signatureBaseString = createSignatureBaseString(parameterString, requestUrl); 
   const signingKey = createSigningKey(); 
   const signature = createSignature(signingKey, signatureBaseString);
   return createAuthorizationHeader(oauthOnce, timeStamp, signature, parameters); 
 };
-
-
-
-
+// const url = "https://api.twitter.com/oauth/access_token";
+// const params = [{
+//   key:"oauth_consumer_key", value:"cChZNFj6T5R0TigYB9yd1w" 
+// }, {
+//   key:"oauth_token", value:"NPcudxy0yU5T3tBzho7iCotZ3cnetKwcTIRlX0iwRl0" }]; 
+// const test = createSignedHeader(params, url); 
+// console.log(test); 
 
 //Util function 
 
-const parseOAuthToken = (responseString) => { 
-  return responseString.split("&")[0].split("=")[1];
+
+
+const parseOAuthTokens= (responseString, keys = []) => { 
+  const params = responseString.split("&");
+  const paramsKeysAndValues = params.map((param) => { 
+    const keyAndValue = param.split("="); 
+    const key = keyAndValue[0]; 
+    const value = keyAndValue[1]; 
+    return {key, value}
+  })
+
+  if (keys.length === 0) { 
+    return paramsKeysAndValues; 
+  } 
+
+  return paramsKeysAndValues.filter(param => keys.includes(param.key) ); 
 };
 
 
@@ -187,6 +205,6 @@ module.exports = {
   createSignatureBaseString, 
   createSignature,
   createAuthorizationHeader, 
-  createSignedHeader, 
-  parseOAuthToken
+  createSignedHeader,  
+  parseOAuthTokens
  }
