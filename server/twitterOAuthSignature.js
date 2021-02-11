@@ -30,21 +30,6 @@ const createOAuthOnce = () => {
 // 6) Append the encoded value to the output string.
 // 7) If there are more key/value pairs remaining, append a ‘&’ character to the output string.
 
-// const createParameterString = (oauthOnce, oauthTimeStamp) => { 
-//   return percentEncode("oauth_callback") + "=" +
-//   percentEncode(process.env.OAUTH_CALLBACK) + '&' +
-//   percentEncode("oauth_consumer_key") + '=' +
-//   percentEncode(process.env.OAUTH_CONSUMER_KEY) + '&' + 
-//   percentEncode("oauth_nonce") + '=' + 
-//   percentEncode(oauthOnce) + '&' + 
-//   percentEncode("oauth_signature_method")  + '=' + 
-//   percentEncode(process.env.OAUTH_SIGNATURE_METHOD) + '&' +
-//   percentEncode("oauth_timestamp") + "=" + 
-//   percentEncode(oauthTimeStamp) + "&" +  
-//   percentEncode("oauth_version") + "=" + 
-//   percentEncode(process.env.OAUTH_VERSION);
-// };
-
 
 
 
@@ -97,8 +82,8 @@ const createParameterString = (oauthOnce, oauthTimeStamp, parameters) => {
 // 4) Append the ‘&’ character to the output string.
 // 5) Percent encode the parameter string and append it to the output string.
 
-const createSignatureBaseString = (parameterString, requestUrl) => { 
-  return `POST&${percentEncode(requestUrl)}&${percentEncode(parameterString)}`;
+const createSignatureBaseString = (parameterString, requestUrl, HttpMethod = "POST") => { 
+  return `${HttpMethod}&${percentEncode(requestUrl)}&${percentEncode(parameterString)}`;
 };
 
 // createSigningKey
@@ -159,24 +144,15 @@ const createAuthorizationHeader = (oauthOnce, timeStamp, signature, params) => {
 
 
 //This does all the work for you of creating a signed header for Twitter
-const createSignedHeader = (parameters, requestUrl) => { 
+const createSignedHeader = (parameters, requestUrl, oauthTokenSecret, HttpMethod) => { 
   const timeStamp = createTimeStamp();
   const oauthOnce = createOAuthOnce();
   const parameterString = createParameterString(oauthOnce, timeStamp, parameters); 
-  const signatureBaseString = createSignatureBaseString(parameterString, requestUrl); 
-  const signingKey = createSigningKey(); 
+  const signatureBaseString = createSignatureBaseString(parameterString, requestUrl, HttpMethod); 
+  const signingKey = createSigningKey(oauthTokenSecret); 
   const signature = createSignature(signingKey, signatureBaseString);
   return createAuthorizationHeader(oauthOnce, timeStamp, signature, parameters); 
 };
-// const url = "https://api.twitter.com/oauth/access_token";
-// const params = [{
-//   key:"oauth_consumer_key", value:"cChZNFj6T5R0TigYB9yd1w" 
-// }, {
-//   key:"oauth_token", value:"NPcudxy0yU5T3tBzho7iCotZ3cnetKwcTIRlX0iwRl0" }]; 
-// const test = createSignedHeader(params, url); 
-// console.log(test); 
-
-//Util function 
 
 
 

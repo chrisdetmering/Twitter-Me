@@ -12,8 +12,9 @@ import GetCredentials from "./Components/Util/Auth/GetCredentials";
 import './App.css';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false); 
-  const [credentials, setCredentials] = useState([]); 
+  const initialState = () => Boolean(localStorage.getItem("screen_name"));
+  const [loggedIn, setLoggedIn] = useState(initialState); 
+
 
   return (
     <Router>
@@ -22,13 +23,13 @@ function App() {
             <Login login={setLoggedIn}/>
           </Route>
           <Route exact path="/get-credentials"> 
-            <GetCredentials login={setLoggedIn} setCredentials={setCredentials}/>
+            <GetCredentials login={setLoggedIn}/>
           </Route>
           <ProtectedRoute exact path="/home" loggedIn={loggedIn} >
-            <Home setLoggedIn={setLoggedIn} credentials={credentials}/>
+            <Home setLoggedIn={setLoggedIn} />
           </ProtectedRoute>
           <ProtectedRoute exact path="/profile" loggedIn={loggedIn} >
-            <Profile setLoggedIn={setLoggedIn} credentials={credentials}/>
+            <Profile setLoggedIn={setLoggedIn} />
           </ProtectedRoute>
         </Switch>
     </Router>);

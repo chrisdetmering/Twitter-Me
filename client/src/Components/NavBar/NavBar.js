@@ -13,6 +13,12 @@ export default function NavBar(props) {
       <li>
         <NavLink to="/profile" activeClassName="active">profile</NavLink>
       </li>
+      <li>
+        <button>Tweet</button>
+      </li>
+      <li>
+        <button onClick={props.logout}>Logout</button>
+      </li>
     </ul>
   ); 
 
