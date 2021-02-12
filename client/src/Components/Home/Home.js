@@ -1,22 +1,22 @@
 import {useState, useEffect} from "react"; 
 import NavBar from "../NavBar/NavBar"; 
 export default function Home(props) { 
-  const initialIdState = () => localStorage.getItem("user_id"); 
-  const [userId] = useState(initialIdState); 
   const [profileImageUrl, setProfileImageUrl] = useState(''); 
   const [homeTimelineTweets, setHomeTimelineTweets] = useState([]); 
-  const {setLoggedIn} = props; 
+  const [localTrendingTweets, setLocalTrendingTweets] = useState([]); 
+  const {setIsLoggedIn} = props; 
   
   useEffect(() => { 
-    fetch(`/api/profile-picture?user_id=${userId}`)
+    fetch(`/api/profile-picture`)
     .then(data => data.json())
     .then(response => {
       setProfileImageUrl(response); 
     })
+    .catch(error => console.error(error))
   }, [])
 
   useEffect(() => { 
-    fetch(`/api/home-timeline?oauth_token=${localStorage.getItem('oauth_token')}&oauth_token_secret=${localStorage.getItem('oauth_token_secret')}`)
+    fetch(`/api/home-timeline`)
     .then(data => data.json())
     .then(response => { 
       if (response) { 
@@ -27,11 +27,23 @@ export default function Home(props) {
   }, [])
 
 
+  // useEffect(() => { 
+  //   fetch(`/api/trends`)
+  //   .then(data => data.json())
+  //   .then(response => { 
+  //     if (response) { 
+  //       setHomeTimelineTweets(response); 
+  //     }
+  //   })
+  //   .catch(error => console.error(error))
+  // }, [])
+
+
   return(<>
-    <NavBar logout={() => setLoggedIn(false)}/>
+    <NavBar logout={() => setIsLoggedIn(false)}/>
     
     
-    {/*Tweet Card*/}
+    {/*TweetCard*/}
     <h1>Home</h1>
     <img src={profileImageUrl} alt="profile-pic"/> 
     <p>What's Happening?</p>
@@ -46,9 +58,15 @@ export default function Home(props) {
     </ul>
 
 
-    {/* Search bar*/}
+    {/* SearchBar*/}
     <br/>
     <input type="text" placeholder="search twitter..."/>
-    
+    {/*What's Happing local trends*/}
+    {/*TODO: get local trends using:}
+    {/*1. /trends/available endpoint */}
+    {/*2. /trends/location* endpoint */}
+    <ul>
+
+    </ul>
   </>); 
 }

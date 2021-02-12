@@ -13,23 +13,23 @@ import './App.css';
 
 function App() {
   const initialState = () => Boolean(localStorage.getItem("screen_name"));
-  const [loggedIn, setLoggedIn] = useState(initialState); 
+  const [isLoggedIn, setIsLoggedIn] = useState(initialState); 
 
 
   return (
     <Router>
         <Switch>
           <Route exact path="/">
-            <Login login={setLoggedIn}/>
+            <Login login={setIsLoggedIn}/>
           </Route>
           <Route exact path="/get-credentials"> 
-            <GetCredentials login={setLoggedIn}/>
+            <GetCredentials login={setIsLoggedIn}/>
           </Route>
-          <ProtectedRoute exact path="/home" loggedIn={loggedIn} >
-            <Home setLoggedIn={setLoggedIn} />
+          <ProtectedRoute exact path="/home" isLoggedIn={isLoggedIn} >
+            <Home setIsLoggedIn={setIsLoggedIn} />
           </ProtectedRoute>
-          <ProtectedRoute exact path="/profile" loggedIn={loggedIn} >
-            <Profile setLoggedIn={setLoggedIn} />
+          <ProtectedRoute exact path="/profile" isLoggedIn={isLoggedIn} >
+            <Profile setIsLoggedIn={setIsLoggedIn} />
           </ProtectedRoute>
         </Switch>
     </Router>);

@@ -4,11 +4,11 @@ import {
 } from "react-router-dom"; 
 
 export default function ProtectedRoute(props) { 
-  const { children, loggedIn } = props; 
+  const { children, isLoggedIn } = props; 
   return( 
     <Route
       render={({location}) => 
-        loggedIn ? ( 
+        isLoggedIn ? ( 
           children
         ) : ( 
           <Redirect 
