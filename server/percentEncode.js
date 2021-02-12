@@ -21,6 +21,4 @@ const percentEncode = (string) => {
   return encodedString; 
 }
 
-console.log(percentEncode('')); 
-
 module.exports = percentEncode; 
