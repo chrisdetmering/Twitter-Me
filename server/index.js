@@ -36,7 +36,7 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
       console.log(oauthParams);
     const oauthTokenValue = oauthParams["oauth_token"]; 
     
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${this.responseText}`; 
     res.send(url); 
      
     })
