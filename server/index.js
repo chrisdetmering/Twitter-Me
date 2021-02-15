@@ -27,17 +27,17 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
     xhr.open(method, url);
 
     const AuthorizationHeaderString = createSignedHeader(parameters, url, undefined, method);  
-    xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+    // xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
   
     xhr.addEventListener("load", function() { 
       
-      const oauthParams = parseOAuthParams(this.responseText); 
-      console.log(oauthParams);
-    const oauthTokenValue = oauthParams["oauth_token"]; 
+    //   const oauthParams = parseOAuthParams(this.responseText); 
+     
+    // const oauthTokenValue = oauthParams["oauth_token"]; 
     
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${this.responseText}`; 
-    res.send(AuthorizationHeaderString); 
+    // const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${this.responseText}`; 
+    res.send(this.responseText); 
      
     })
    
