@@ -30,9 +30,11 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
 
   customFetch("POST", url, options)
   .then(response => { 
+    console.log(response)
     const oauthParams = parseOAuthParams(response); 
-    const oauthTokenValue = oauthParams["oauth_token"]; 
 
+    const oauthTokenValue = oauthParams["oauth_token"]; 
+    const oauthTokenValue = response; 
     const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
     res.send(url); 
   })
