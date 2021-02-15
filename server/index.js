@@ -32,12 +32,11 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
   
     xhr.addEventListener("load", function() { 
       
-    //   const oauthParams = parseOAuthParams(this.responseText); 
-     
-    // const oauthTokenValue = oauthParams["oauth_token"]; 
+    const oauthParams = parseOAuthParams(this.responseText); 
+    const oauthTokenValue = oauthParams["oauth_token"]; 
     
-    // const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${this.responseText}`; 
-    res.send(this.responseText); 
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
+    res.send(url ); 
      
     })
    
