@@ -22,56 +22,23 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
     {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_callback", value: process.env.OAUTH_CALLBACK}
   ]; 
-  const method = "POST"; 
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url);
+  const options = { 
+    parameters, 
+    isUserContextAuth: true,
+  }
 
-    const AuthorizationHeaderString = createSignedHeader(parameters, url, undefined, method);  
-    // xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  
-    xhr.addEventListener("load", function() { 
-      
-    const oauthParams = parseOAuthParams(this.responseText); 
+  customFetch("POST", url, options)
+  .then(response => { 
+    const oauthParams = parseOAuthParams(response); 
     const oauthTokenValue = oauthParams["oauth_token"]; 
-    
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
-    res.send(url ); 
-     
-    })
-   
-
-
-  xhr.send();
-
-
-
-
-////Twitter Api will send back an JSON object with a property errors
-      //Not sure why I had to JSON.stringify this in order to 
-      //make the /api/access-token endpoint work 
-
-  // const options = { 
-  //   parameters, 
-  //   isUserContextAuth: true,
-  // }
-
-  // customFetch("POST", url, options)
-  // .then(response => { 
-  //   console.log(response); 
-  //   const oauthParams = parseOAuthParams(response); 
-    
-  //   const oauthTokenValue = oauthParams["oauth_token"]; 
  
-  //   const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
-  //   res.send(url); 
-  // })
-  // .catch(error => res.send(error))
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
+    res.send(url); 
+  })
+  .catch(error => res.send(error))
 })
 
-//Cause 
-//1. Something wrong with customFetch 
-//2. Something wrong with environment vars
+
 
 app.get("/api/access-token", (req, res) => { 
   const oauthToken = req.query.oauth_token; 
