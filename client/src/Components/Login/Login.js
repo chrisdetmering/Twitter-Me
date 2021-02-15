@@ -12,11 +12,9 @@ export default function Login(props) {
   function handleTwitterLoginClick() { 
     fetch("/api/sign-in-with-twitter")
     .then(data => {
-      console.log(data)
       return data.text()
      })
     .then(response => { 
-      console.log(response)
       window.location = response; 
     }); 
   }
