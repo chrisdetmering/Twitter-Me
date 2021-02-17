@@ -6,6 +6,7 @@ export default function Home(props) {
   const [localTrendingTweets, setLocalTrendingTweets] = useState([]); 
   const [searchedTweets, setSearchedTweets] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(''); 
+  const [newTweet, setNewTweet] = useState(''); 
   const [isSearched, setIsSearched] = useState(false); 
   const {setIsLoggedIn} = props; 
   
@@ -19,11 +20,30 @@ export default function Home(props) {
   }, [])
 
   useEffect(() => { 
+    getTimelineTweets(); 
+  }, [])
+
+  useEffect(() => { 
+    fetch(`/api/trends`)
+    .then(data => data.json())
+    .then(response => { 
+      if (response.length > 0) { 
+        console.log(response[0].trends);
+        setLocalTrendingTweets(response[0].trends); 
+      }
+    })
+    .catch(error => console.error(error))
+  }, [])
+
+
+  function getTimelineTweets() { 
     fetch(`/api/home-timeline`)
     .then(data => data.json())
     .then(response => { 
-      if (response[0].errors) { 
-        console.log(response[0].errors); 
+      
+      if (response.errors) { 
+        alert(response.errors[0].message);
+        console.error(response.errors[0].message); 
         return; 
       }
 
@@ -32,35 +52,7 @@ export default function Home(props) {
       }
     })
     .catch(error => console.error(error))
-  }, [])
-
-   useEffect(() => { 
-    fetch(`/api/trends`)
-    .then(data => data.json())
-    .then(response => { 
-      
-      if (response.length > 0) { 
-        console.log(response[0].trends)
-        setLocalTrendingTweets(response[0].trends); 
-      }
-    })
-    .catch(error => console.error(error))
-  }, [])
-
-
-
-
-
-  // useEffect(() => { 
-  //   fetch(`/api/status/update`)
-  //   .then(data => console.log(data))
-  //   // .then(response => { 
-  //   //   if (response) { 
-  //   //     setHomeTimelineTweets(response); 
-  //   //   }
-  //   // })
-  //   .catch(error => console.error(error))
-  // }, [])
+  }
 
   function handleSearchChange(e) { 
     e.preventDefault(); 
@@ -79,23 +71,38 @@ export default function Home(props) {
     .catch(error => console.log(error))
   }
 
+  function handleNewTweetChange(e) { 
+    e.preventDefault(); 
+    const newTweet = e.target.value;
+    setNewTweet(newTweet); 
+  } 
 
-  useEffect(() => { 
-    console.log(searchTerm); 
-  }, [searchTerm])
 
-
-function displayedTweets() { 
-  if (isSearched) { 
-    return searchedTweets.map(tweet => (
-      <li key={tweet.id}>{tweet.text}</li>
-    ))
+  function handleNewTweet() { 
+    fetch(`/api/status/update?status=${newTweet}`)
+    .then(response => {
+      if (response.ok) { 
+        getTimelineTweets();  
+        setNewTweet(''); 
+      }
+      
+    })
+    .catch(error => console.error(error))
   }
 
-  return localTrendingTweets.map(trend => (
-    <li key={trend.name}>{trend.name}</li>
-  ))
-}
+
+
+  function displayTweets() { 
+    if (isSearched) { 
+      return searchedTweets.map(tweet => (
+        <li key={tweet.id}>{tweet.text}</li>
+      ))
+    }
+
+    return localTrendingTweets.map(trend => (
+      <li key={trend.name}>{trend.name}</li>
+    ))
+  }
 
   return(<>
     <NavBar logout={() => setIsLoggedIn(false)}/>
@@ -104,8 +111,8 @@ function displayedTweets() {
     {/*TweetCard*/}
     <h1>Home</h1>
     <img src={profileImageUrl} alt="profile-pic"/> 
-    <p>What's Happening?</p>
-    <button>Tweet</button>
+    <input placeholder="what's happening?" onChange={handleNewTweetChange} value={newTweet}/>
+    <button onClick={handleNewTweet}>Tweet</button>
 
 
     {/*Timeline */}
@@ -121,7 +128,7 @@ function displayedTweets() {
     <input type="text" placeholder="search twitter..." onChange={handleSearchChange}/>
     <button onClick={handleSearchButtonClick}>Search</button>
     <ul>
-      {displayedTweets()}
+      {displayTweets()}
     </ul>
     
   </>); 

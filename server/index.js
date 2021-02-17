@@ -204,20 +204,20 @@ app.get("/api/search", (req, res) => {
 
 //post Tweet
 app.get("/api/status/update", (req, res) => { 
+  const newTweet = req.query.status; 
   const cookies = req.cookies; 
   const { oauth_token, oauth_token_secret } = cookies; 
   const method = "POST"; 
-  const url = "https://api.twitter.com/1.1/statuses/update.json?status=hello"; 
+  const url = `https://api.twitter.com/1.1/statuses/update.json?status=${newTweet}`; 
   const baseUrl = "https://api.twitter.com/1.1/statuses/update.json"; 
   const parameters = [ 
     {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_token", value: oauth_token}, 
-    {key:"status", value:"hello"}
+    {key:"status", value: newTweet}
   ]; 
 
 
   const xhr = new XMLHttpRequest(); 
-
   xhr.open(method, url);
   
   const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
@@ -226,11 +226,8 @@ app.get("/api/status/update", (req, res) => {
   
 
   xhr.addEventListener("load", function() { 
-  
-    console.log(this.responseText); 
+    res.json(this.responseText); 
   })
-
-
 
   xhr.send(); 
 
