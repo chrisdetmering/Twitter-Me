@@ -3,6 +3,7 @@ const {createSignedHeader} = require("./twitterOAuthSignature");
 
 function customFetch(method, url, options) { 
   const {
+    baseUrl = url,
     body, 
     parameters, 
     isUserContextAuth, 

@@ -14,10 +14,16 @@ const {
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 app.use(cookieParser()); 
 
+
+//TODO: 
+//1. put oauth_consumer_key as default param 
+//2. set cookies to be signed 
+//3. parse signed cookies 
+//4. take care of twitter sending technical error (HTML)
+
 app.get('/api/sign-in-with-twitter', (req, res) => { 
   
   const url = "https://api.twitter.com/oauth/request_token"; 
-  //TODO: include oauth_consumer_key inside of default params
   const parameters = [ 
     {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_callback", value: process.env.OAUTH_CALLBACK}
@@ -45,7 +51,6 @@ app.get("/api/access-token", (req, res) => {
   const body = `oauth_verifier=${req.query.oauth_verifier}`; 
   
   const url = "https://api.twitter.com/oauth/access_token"; 
-  //TODO: include oauth_consumer_key inside of default params
   const parameters = [ 
     {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_token", value: oauthToken}
@@ -62,8 +67,6 @@ app.get("/api/access-token", (req, res) => {
   .then(response => { 
 
     const oauthParams = parseOAuthParams(response); 
-
-      //TODO: Make these signed cookies 
       const authCookies = [];
 
       for (const param in oauthParams) { 
@@ -79,7 +82,6 @@ app.get("/api/access-token", (req, res) => {
 
 
 app.get("/api/profile-picture", (req, res) => { 
-  //  TODO: Parse the signed cookies 
   const cookies = req.cookies;
   const userId = cookies.user_id;
   const method = "GET";
@@ -92,13 +94,12 @@ app.get("/api/profile-picture", (req, res) => {
     const profilePicUrl = responseJSON['profile_image_url_https']; 
     res.json(profilePicUrl); 
   })
-  .catch(error => res.json(error)); 
+
 })
 
 
 
 app.get("/api/home-timeline", (req, res) => { 
-  //TODO: Parse the signed cookies 
   const cookies = req.cookies; 
   const oauthToken = cookies.oauth_token; 
   const oauthTokenSecret = cookies.oauth_token_secret; 
@@ -127,30 +128,112 @@ app.get("/api/home-timeline", (req, res) => {
 
 
 
+//get trends in the United States
 app.get("/api/trends", (req, res) => { 
-  //TODO: Parse the signed cookies 
   const cookies = req.cookies; 
-  const oauthToken = cookies.oauth_token; 
-  const oauthTokenSecret = cookies.oauth_token_secret; 
+  const { oauth_token, oauth_token_secret } = cookies; 
   const method = "GET"; 
-  const xhr = new XMLHttpRequest();
-  const requestUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"; 
+  const url = "https://api.twitter.com/1.1/trends/place.json?id=23424977"; 
+  const baseUrl = "https://api.twitter.com/1.1/trends/place.json"; 
   const parameters = [ 
     {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-    {key:"oauth_token", value: oauthToken}
+    {key:"oauth_token", value: oauth_token}, 
+    {key: "id", value: '23424977'}
   ]; 
 
-  xhr.open(method, requestUrl);
+
+  const xhr = new XMLHttpRequest(); 
+
+  xhr.open(method, url);
   
-  const AuthorizationHeaderString = createSignedHeader(parameters, requestUrl, oauthTokenSecret, method);  
+  const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
   xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
   xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  xhr.addEventListener("load", function() { 
   
-   res.json(JSON.parse(this.responseText)); 
+
+  xhr.addEventListener("load", function() { 
+    const response = JSON.parse(this.responseText); 
+    res.json(response); 
   })
 
   xhr.send(); 
+
+})
+
+
+//search twitter
+app.get("/api/search", (req, res) => { 
+  const cookies = req.cookies; 
+  const { oauth_token, oauth_token_secret } = cookies; 
+  const q = req.query.q
+  const method = "GET"; 
+  const url = `https://api.twitter.com/1.1/search/tweets.json?q=${q}`; 
+  const baseUrl = "https://api.twitter.com/1.1/search/tweets.json"; 
+  const parameters = [ 
+    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
+    {key:"oauth_token", value: oauth_token}, 
+    {key: "q", value: q}
+  ]; 
+
+
+  const xhr = new XMLHttpRequest(); 
+
+  xhr.open(method, url);
+  
+  const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
+  xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+  
+
+  xhr.addEventListener("load", function() { 
+    
+    const response = JSON.parse(this.responseText); 
+    console.log(response); 
+    res.json(response); 
+  })
+
+  xhr.send(); 
+
+})
+
+
+
+
+
+
+
+//post Tweet
+app.get("/api/status/update", (req, res) => { 
+  const cookies = req.cookies; 
+  const { oauth_token, oauth_token_secret } = cookies; 
+  const method = "POST"; 
+  const url = "https://api.twitter.com/1.1/statuses/update.json?status=hello"; 
+  const baseUrl = "https://api.twitter.com/1.1/statuses/update.json"; 
+  const parameters = [ 
+    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
+    {key:"oauth_token", value: oauth_token}, 
+    {key:"status", value:"hello"}
+  ]; 
+
+
+  const xhr = new XMLHttpRequest(); 
+
+  xhr.open(method, url);
+  
+  const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
+  xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+  
+
+  xhr.addEventListener("load", function() { 
+  
+    console.log(this.responseText); 
+  })
+
+
+
+  xhr.send(); 
+
 })
 
 
