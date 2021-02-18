@@ -5,6 +5,13 @@ import {
 
 
 export default function NavBar(props) { 
+
+
+  function handleTweetButtonClick() { 
+    alert("model pop up"); 
+
+  }
+
   return(
     <ul>
       <li>
@@ -14,7 +21,7 @@ export default function NavBar(props) {
         <NavLink to="/profile" activeClassName="active">profile</NavLink>
       </li>
       <li>
-        <button>Tweet</button>
+        <button onClick={handleTweetButtonClick}>Tweet</button>
       </li>
       <li>
         <button onClick={props.logout}>Logout</button>
