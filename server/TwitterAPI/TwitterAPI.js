@@ -7,43 +7,59 @@ const {
 class TwitterApi { 
   constructor() { 
     this.baseUrl = null;
-    this.parameters = [
-      {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY}
-    ];
+    this.parameters = [];
     this.oauth_token = null;
     this.oauth_token_secret = null;
+    this.queryParam = null; 
+    this.body = null; 
   }
   
+  get(baseUrl, queryParam) { 
+    this.setBaseUrl(baseUrl);
+    this.setQueryParam(queryParam); 
+    return this.request("GET"); 
+  }
+
+  
+  post(baseUrl, queryParam, body) { 
+    this.setBaseUrl(baseUrl);
+    this.setQueryParam(queryParam); 
+    return this.request("POST", body); 
+  }
+
   setBaseUrl(baseUrl) { 
     this.baseUrl = baseUrl; 
   }
 
-  setParameters(parameters) { 
-    this.parameters = [...this.parameters, ...parameters]; 
+  // setParameters(parameters) { 
+  //   this.parameters = [...this.parameters, ...parameters]; 
+  // }
+
+  setQueryParam(queryParam) { 
+    if (queryParam) { 
+      const keys = Object.keys(queryParam); 
+      const key = keys[0]; 
+      const value = queryParam[key]; 
+      this.queryParam = {key, value}
+    } else { 
+      this.queryParam = null; 
+    }
   }
 
-  setParameter(key, value) { 
-    this.parameters.push({key, value}); 
+  getBaseUrlWithQueryParams() { 
+    return `${this.baseUrl}?${this.queryParam.key}=${this.queryParam.value}`;
   }
 
-  setAuthToken(oauthToken) { 
-    this.setParameter('oauth_token', oauthToken); 
-    this.oauth_token = oauthToken; 
-  }
-  setAuthTokenSecret(oauthTokenSecret) { 
-    this.oauth_token_secret = oauthTokenSecret; 
-  }
-
-  
- request(method, url, body) { 
+  request(method, body) { 
     const xhr = new XMLHttpRequest(); 
-
+    const url = this.queryParam ? this.getBaseUrlWithQueryParams() : this.baseUrl; 
+    
     xhr.open(method, url);
     
-    const AuthorizationHeaderString = createSignedHeader(this.parameters, this.baseUrl, this.oauth_token_secret, method);  
-    console.log(AuthorizationHeaderString)
+    const AuthorizationHeader =  this.getSignedHeader(method); 
+  
     xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
+    xhr.setRequestHeader("Authorization", AuthorizationHeader);
     
     const promise = new Promise((resolve, reject) => { 
       xhr.addEventListener("load", function() { 
@@ -61,28 +77,39 @@ class TwitterApi {
     return promise; 
   }
 
-  buildUrl(queryParams) { 
+  getSignedHeader(method) { 
+    let parameters; 
 
+    if (this.queryParam) { 
+      parameters = this.getParametersWithData(); 
+    } else { 
+      parameters = this.parameters; 
+    }
+    
+    return createSignedHeader(parameters, this.baseUrl, this.oauth_token_secret, method);
   }
 
-  //get 
-  get(url, queryParams) { 
-    //STOPPED HERE
-    this.baseUrl = url; 
-    let urlWithQueryParams = this.baseUrl + '?'; 
 
-    const keys = Object.keys(queryParams); 
-    const value = queryParams[keys[0]]; 
-    this.setParameter(keys[0], value); 
-    urlWithQueryParams = urlWithQueryParams + keys[0] + '=' + value; 
-   
-    return this.request("GET", urlWithQueryParams); 
+  getParametersWithData() { 
+    return [...this.parameters, this.queryParam]; 
   }
 
-  //post
-  post(endpoint, body) { 
-
+  setParameter(key, value) { 
+    this.parameters.push({key, value}); 
   }
+
+  setAuthToken(oauthToken) { 
+    this.setParameter('oauth_token', oauthToken); 
+    this.oauth_token = oauthToken; 
+  }
+
+  setAuthTokenSecret(oauthTokenSecret) { 
+    this.setParameter('oauth_token_secret', oauthTokenSecret); 
+    this.oauth_token_secret = oauthTokenSecret; 
+  }
+
+  
+  
 } 
 
 

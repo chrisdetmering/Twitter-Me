@@ -47,8 +47,8 @@ export default function TweetSearch(props) {
       ))
     }
 
-    return localTrendingTweets.map(trend => (
-      <li key={trend.name}>{trend.name}</li>
+    return localTrendingTweets.map((trend, idx) => (
+      <li key={idx}>{trend.name}</li>
     ))
   }
 

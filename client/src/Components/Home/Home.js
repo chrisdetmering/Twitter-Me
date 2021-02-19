@@ -8,14 +8,14 @@ export default function Home(props) {
   const [newTweet, setNewTweet] = useState(''); 
   const {setIsLoggedIn} = props; 
   
-  useEffect(() => { 
-    fetch(`/api/profile-picture`)
-    .then(data => data.json())
-    .then(response => {
-      setProfileImageUrl(response); 
-    })
-    .catch(error => console.error(error))
-  }, [])
+  // useEffect(() => { 
+  //   fetch(`/api/profile-picture`)
+  //   .then(data => data.json())
+  //   .then(response => {
+  //     setProfileImageUrl(response); 
+  //   })
+  //   .catch(error => console.error(error))
+  // }, [])
 
   useEffect(() => { 
     getTimelineTweets(); 
@@ -64,7 +64,7 @@ export default function Home(props) {
     <NavBar logout={() => setIsLoggedIn(false)}/>
     {/*TweetCard*/}
     <h1>Home</h1>
-    <img src={profileImageUrl} alt="profile-pic"/> 
+    {/* <img src={profileImageUrl} alt="profile-pic"/>  */}
     <input placeholder="what's happening?" onChange={handleNewTweetChange} value={newTweet}/>
     <button onClick={handleNewTweet}>Tweet</button>
 

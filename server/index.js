@@ -18,24 +18,24 @@ app.use(cookieParser());
 
 
 //TODO: 
-//1. put oauth_consumer_key as default param 
-//2. set cookies to be signed 
-//3. parse signed cookies 
+//1. put oauth_consumer_key as default param (done)
+//2. set cookies to be signed (no longer doing)
+//3. parse signed cookies (no longer doing)
 //4. take care of twitter sending technical error (HTML)
 
 //steps for implementing Twitter API 
-//1. Copy twitterOAuthSignature 
-//2. Make all functions, methods 
-//3. Use TwitterApi for basic routes 
-//4. Redesign sign in flow to not have GetCredentials Component
-//5. Going to need to use sessions https://www.tutorialspoint.com/expressjs/expressjs_sessions.htm
+//1. Copy twitterOAuthSignature (did something else)
+//2. Make all functions, methods (did something else)
+//3. Use TwitterApi for basic routes (in progress. 2 more routes)
+//4. Handle errors 
+//5. Test on heroku
+//6. Redesign sign in flow to not have GetCredentials Component
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
   
   const url = "https://api.twitter.com/oauth/request_token"; 
   const parameters = [ 
-    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_callback", value: process.env.OAUTH_CALLBACK}
   ]; 
   const options = { 
@@ -62,7 +62,6 @@ app.get("/api/access-token", (req, res) => {
   
   const url = "https://api.twitter.com/oauth/access_token"; 
   const parameters = [ 
-    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
     {key:"oauth_token", value: oauthToken}
   ]; 
   const method = "POST"
@@ -78,11 +77,16 @@ app.get("/api/access-token", (req, res) => {
 
     const oauthParams = parseOAuthParams(response); 
       const authCookies = [];
-
+  
       for (const param in oauthParams) { 
         const authCookie = `${param}=${oauthParams[param]};`;
         authCookies.push(authCookie); 
       }
+
+
+      twAPI.setAuthToken(oauthParams.oauth_token); 
+      twAPI.setAuthTokenSecret(oauthParams.oauth_token_secret)
+
 
       res.header('Set-Cookie', authCookies);
       
@@ -101,7 +105,6 @@ app.get("/api/profile-picture", (req, res) => {
   customFetch(method, url, {isBearerAuth})
   .then(response => {
     const responseJSON = JSON.parse(response); 
-    console.log(responseJSON);
     const profilePicUrl = responseJSON['profile_image_url_https']; 
     res.json(profilePicUrl); 
   })
@@ -127,124 +130,43 @@ app.get("/api/profile-info", (req, res) => {
 
 
 app.get("/api/home-timeline", (req, res) => { 
-  const cookies = req.cookies; 
-  const oauthToken = cookies.oauth_token; 
-  const oauthTokenSecret = cookies.oauth_token_secret; 
-  const method = "GET"; 
-  const url = "https://api.twitter.com/1.1/statuses/home_timeline.json"; 
-  const parameters = [ 
-    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-    {key:"oauth_token", value: oauthToken}
-  ]; 
-  const isUserContextAuth = true; 
-  const options = { 
-    parameters, 
-    oauthTokenSecret,
-    isUserContextAuth
-  }
+  const url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
 
-  customFetch(method, url, options)
+  twAPI.get(url)
   .then(response => {
-    res.json(JSON.parse(response))
+    res.json(response)
   })
-  .catch(error => { 
-    res.json(error); 
-  })
- 
 })
 
-
-
-
-//get trends in the United States
+//get trends in the United States. Need to make this more dynamic
 app.get("/api/trends", (req, res) => { 
-  const cookies = req.cookies; 
-  const { oauth_token, oauth_token_secret } = cookies; 
-  
+  const url = "https://api.twitter.com/1.1/trends/place.json"; 
+  const query = {"id": "23424977"}; 
 
-  twAPI.setAuthToken(oauth_token); 
-  twAPI.setAuthTokenSecret(oauth_token_secret)
-  twAPI.get(
-    "https://api.twitter.com/1.1/trends/place.json", 
-    {"id": "23424977"}
-  )
+  twAPI.get(url, query)
   .then(response => { 
     res.json(response); 
   })
-
 })
 
-
-//search twitter
 app.get("/api/search", (req, res) => { 
-  const cookies = req.cookies; 
-  const { oauth_token, oauth_token_secret } = cookies; 
-  const q = req.query.q
-  const method = "GET"; 
-  const url = `https://api.twitter.com/1.1/search/tweets.json?q=${q}`; 
-  const baseUrl = "https://api.twitter.com/1.1/search/tweets.json"; 
-  const parameters = [ 
-    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-    {key:"oauth_token", value: oauth_token}, 
-    {key: "q", value: q}
-  ]; 
+  const url = "https://api.twitter.com/1.1/search/tweets.json"; 
+  const query = {"q": req.query.q }
 
-
-  const xhr = new XMLHttpRequest(); 
-
-  xhr.open(method, url);
-  
-  const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
-  xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  
-
-  xhr.addEventListener("load", function() { 
-    
-    const response = JSON.parse(this.responseText); 
-    console.log(response); 
+  twAPI.get(url, query)
+  .then(response => {
     res.json(response); 
   })
-
-  xhr.send(); 
-
 })
 
-
-
-
-
-
-
-//post Tweet
 app.get("/api/status/update", (req, res) => { 
-  const newTweet = req.query.status; 
-  const cookies = req.cookies; 
-  const { oauth_token, oauth_token_secret } = cookies; 
-  const method = "POST"; 
-  const url = `https://api.twitter.com/1.1/statuses/update.json?status=${newTweet}`; 
-  const baseUrl = "https://api.twitter.com/1.1/statuses/update.json"; 
-  const parameters = [ 
-    {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-    {key:"oauth_token", value: oauth_token}, 
-    {key:"status", value: newTweet}
-  ]; 
+  const url = "https://api.twitter.com/1.1/statuses/update.json";
+  const query = {"status":req.query.status}
 
-
-  const xhr = new XMLHttpRequest(); 
-  xhr.open(method, url);
-  
-  const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
-  xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-  xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  
-
-  xhr.addEventListener("load", function() { 
-    res.json(this.responseText); 
+  twAPI.post(url, query)
+  .then(response => { 
+    res.json(response);
   })
-
-  xhr.send(); 
-
 })
 
 
