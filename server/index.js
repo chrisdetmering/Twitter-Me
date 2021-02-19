@@ -9,6 +9,8 @@ const {
   parseOAuthParams
   } = require("./twitterOAuthSignature"); 
   const customFetch = require('./customFetch'); 
+const TwitterApi = require('./TwitterAPI/TwitterAPI'); 
+const twAPI = new TwitterApi(); 
 
 
 app.use(express.static(path.join(__dirname, '../client', 'build')));
@@ -21,11 +23,14 @@ app.use(cookieParser());
 //3. parse signed cookies 
 //4. take care of twitter sending technical error (HTML)
 
-//TODO: 
-//Questions for Drew
-//1. How should I save my authTokens for requests 
-//2. How should I hide all the logic with my interaction with twitter 
-//3. 
+//steps for implementing Twitter API 
+//1. Copy twitterOAuthSignature 
+//2. Make all functions, methods 
+//3. Use TwitterApi for basic routes 
+//4. Redesign sign in flow to not have GetCredentials Component
+//5. Going to need to use sessions https://www.tutorialspoint.com/expressjs/expressjs_sessions.htm
+
+
 app.get('/api/sign-in-with-twitter', (req, res) => { 
   
   const url = "https://api.twitter.com/oauth/request_token"; 
@@ -148,114 +153,24 @@ app.get("/api/home-timeline", (req, res) => {
  
 })
 
-//experimenting with using a class for twitter api
-class TwitterApi { 
-  constructor(baseUrl) { 
-    this.baseUrl = baseUrl
-    this.parameters = []
-    this.oauth_token = null
-    this.oauth_token_secret = null
-  }
-  
-  setParameters(parameters) { 
-    this.parameters = parameters; 
-  }
-
-  setAuthToken(oauthToken) { 
-    this.oauth_token = oauthToken; 
-  }
-  setAuthTokenSecret(oauthTokenSecret) { 
-    this.oauth_token_secret = oauthTokenSecret; 
-  }
-
-  
- request(method, url, data) { 
-    const xhr = new XMLHttpRequest(); 
-
-    xhr.open(method, url);
-    
-    const AuthorizationHeaderString = createSignedHeader(this.parameters, this.baseUrl, this.oauth_token_secret, method);  
-    console.log(AuthorizationHeaderString)
-    xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-    
-    const promise = new Promise((resolve, reject) => { 
-      xhr.addEventListener("load", function() { 
-        const response = JSON.parse(this.responseText); 
-        resolve(response); 
-      })
-      xhr.addEventListener("error", function() { 
-        reject(this.responseText); 
-      })
-
-    })
-    
-  
-    xhr.send(data); 
-    return promise; 
-  }
 
 
-  //get 
-  get(queryParam) { 
-    const url = this.baseUrl + queryParam; 
-    console.log(url)
-    return this.request("GET", url); 
-  }
 
-  //post
-  post(endpoint, body) { 
-
-  }
-} 
-
-const tw = new TwitterApi("https://api.twitter.com/1.1/trends/place.json")
 //get trends in the United States
 app.get("/api/trends", (req, res) => { 
-  
   const cookies = req.cookies; 
   const { oauth_token, oauth_token_secret } = cookies; 
   
 
-  tw.setParameters([ 
-      {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-      {key:"oauth_token", value: oauth_token}, 
-      {key: "id", value: '23424977'}
-    ])
-
-  tw.setAuthToken(oauth_token); 
-  tw.setAuthTokenSecret(oauth_token_secret)
-  tw.get("?id=23424977")
+  twAPI.setAuthToken(oauth_token); 
+  twAPI.setAuthTokenSecret(oauth_token_secret)
+  twAPI.get(
+    "https://api.twitter.com/1.1/trends/place.json", 
+    {"id": "23424977"}
+  )
   .then(response => { 
     res.json(response); 
   })
-
-
-
-  //  const method = "GET"; 
-  // const url = "https://api.twitter.com/1.1/trends/place.json?id=23424977"; 
-  // const baseUrl = "https://api.twitter.com/1.1/trends/place.json"; 
-  // const parameters = [ 
-  //   {key:"oauth_consumer_key", value: process.env.OAUTH_CONSUMER_KEY},
-  //   {key:"oauth_token", value: oauth_token}, 
-  //   {key: "id", value: '23424977'}
-  // ]; 
-  // const xhr = new XMLHttpRequest(); 
-
-  // xhr.open(method, url);
-  
-  // const AuthorizationHeaderString = createSignedHeader(parameters, baseUrl, oauth_token_secret, method);  
-  // console.log(AuthorizationHeaderString)
-  // xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-  // xhr.setRequestHeader("Authorization", AuthorizationHeaderString);
-  
-
-  // xhr.addEventListener("load", function() { 
-  //   const response = JSON.parse(this.responseText); 
-  //   res.json(response); 
-  // })
-
-  // xhr.send(); 
 
 })
 
