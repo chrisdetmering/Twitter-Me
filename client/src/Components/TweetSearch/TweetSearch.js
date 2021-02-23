@@ -12,7 +12,6 @@ export default function TweetSearch(props) {
     .then(data => data.json())
     .then(response => { 
       if (response.length > 0) { 
-        console.log(response[0].trends);
         setLocalTrendingTweets(response[0].trends); 
       }
     })
