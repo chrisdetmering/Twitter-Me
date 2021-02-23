@@ -10,7 +10,6 @@ const {
   } = require("./twitterOAuthSignature"); 
   const customFetch = require('./customFetch'); 
 const TwitterApi = require('./TwitterAPI/TwitterAPI'); 
-const twAPI = new TwitterApi(); 
 const users = require('./TwitterAPI/users'); 
 
 app.use(express.static(path.join(__dirname, '../client', 'build')));
@@ -131,6 +130,7 @@ app.get("/api/home-timeline", (req, res) => {
   const userId = cookies.user_id;
   const {oauth_token, oauth_token_secret} = cookies; 
   //get tokens from users object 
+  const twAPI = new TwitterApi(); 
   twAPI.setAuthToken(oauth_token); 
   twAPI.setAuthTokenSecret(oauth_token_secret); 
   //set tokens for twAPI 
