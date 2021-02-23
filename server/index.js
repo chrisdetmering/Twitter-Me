@@ -1,10 +1,9 @@
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const cookieParser = require('cookie-parser');
 const express = require("express"); 
 const path = require("path"); 
 const app = express(); 
 const PORT = process.env.PORT || 8080; 
-const {parseOAuthParams} = require("./twitterOAuthSignature"); 
+const {parseOAuthParams} = require("./TwitterAPI/twitterOAuthSignature"); 
 const TwitterApi = require('./TwitterAPI/TwitterAPI'); 
 const users = require('./TwitterAPI/users'); 
 
@@ -13,12 +12,14 @@ app.use(cookieParser());
 
 
 //TODO: 
-//4. take care of twitter sending technical error (HTML)
+
 
 //steps for implementing Twitter API 
-//4. Handle errors 
-//5. Test on heroku
-//6. Redesign sign in flow to not have GetCredentials Component
+//Handle errors (catch)
+// - take care of twitter sending technical error (HTML)
+//Redesign sign in flow to not have GetCredentials Component?
+//take care of callbacks 
+//maybe have just one catch all endpoint and pass in what varies? 
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 

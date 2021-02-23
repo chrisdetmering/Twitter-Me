@@ -1,7 +1,7 @@
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const { 
   createSignedHeader
-} = require("../twitterOAuthSignature"); 
+} = require("./twitterOAuthSignature"); 
 
 
 class TwitterApi { 
