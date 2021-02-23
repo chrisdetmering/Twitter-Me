@@ -85,7 +85,7 @@ class TwitterApi {
     } else { 
       parameters = this.parameters; 
     }
-    
+    this.clearParameters(); 
     return createSignedHeader(parameters, this.baseUrl, this.oauth_token_secret, method);
   }
 
@@ -108,7 +108,9 @@ class TwitterApi {
     this.oauth_token_secret = oauthTokenSecret; 
   }
 
-  
+  clearParameters() { 
+    this.parameters = []; 
+  }
   
 } 
 
