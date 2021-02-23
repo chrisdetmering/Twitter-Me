@@ -107,11 +107,7 @@ class TwitterApi {
     this.setParameter('oauth_token_secret', oauthTokenSecret); 
     this.oauth_token_secret = oauthTokenSecret; 
   }
-
-  // clearParameters() { 
-  //   this.parameters = []; 
-  // }
-  
+ 
 } 
 
 

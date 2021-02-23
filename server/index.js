@@ -70,19 +70,16 @@ app.get("/api/access-token", (req, res) => {
   .then(response => { 
 
     const oauthParams = parseOAuthParams(response); 
-      const authCookies = [];
-  
-      for (const param in oauthParams) { 
-        const authCookie = `${param}=${oauthParams[param]};`;
-        authCookies.push(authCookie); 
-      }
+      const {
+        user_id, 
+        oauth_token, 
+        oauth_token_secret
+      } = oauthParams
       
-
-      // twAPI.setAuthToken(oauthParams.oauth_token); 
-      // twAPI.setAuthTokenSecret(oauthParams.oauth_token_secret)
+      users[user_id] = [oauth_token, oauth_token_secret]; 
 
 
-      res.header('Set-Cookie', authCookies);
+      res.header('Set-Cookie', `user_id=${user_id}`);
       
     res.json(oauthParams); 
   }) 
@@ -125,15 +122,14 @@ app.get("/api/access-token", (req, res) => {
 
 app.get("/api/home-timeline", (req, res) => { 
   const url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-  //get user_id from cookie 
   const cookies = req.cookies;
   const userId = cookies.user_id;
-  const {oauth_token, oauth_token_secret} = cookies; 
-  //get tokens from users object 
+  const [oauth_token, oauth_token_secret] = users[userId]; 
+
   const twAPI = new TwitterApi(); 
   twAPI.setAuthToken(oauth_token); 
   twAPI.setAuthTokenSecret(oauth_token_secret); 
-  //set tokens for twAPI 
+ 
   twAPI.get(url)
   .then(response => {
     res.json(response)

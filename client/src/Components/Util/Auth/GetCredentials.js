@@ -28,9 +28,9 @@ export default function GetCredentials(props) {
       //TODO: make this safer
       //Just temporality storing use auth information in local storage until 
       //I can figure out a more secure way of doing it without a DB
-      for (const param in response) { 
-        localStorage.setItem(param, response[param]); 
-      }
+      // for (const param in response) { 
+      //   localStorage.setItem(param, response[param]); 
+      // }
     
     })
     .then(() => { 
