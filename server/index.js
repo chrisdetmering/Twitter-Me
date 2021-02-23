@@ -4,10 +4,7 @@ const express = require("express");
 const path = require("path"); 
 const app = express(); 
 const PORT = process.env.PORT || 8080; 
-const { 
-  parseOAuthParams
-  } = require("./twitterOAuthSignature"); 
-  const customFetch = require('./customFetch'); 
+const {parseOAuthParams} = require("./twitterOAuthSignature"); 
 const TwitterApi = require('./TwitterAPI/TwitterAPI'); 
 const users = require('./TwitterAPI/users'); 
 
@@ -19,32 +16,24 @@ app.use(cookieParser());
 //4. take care of twitter sending technical error (HTML)
 
 //steps for implementing Twitter API 
-//3. Use TwitterApi for basic routes (in progress. 2 more routes)
 //4. Handle errors 
 //5. Test on heroku
 //6. Redesign sign in flow to not have GetCredentials Component
 
 
 app.get('/api/sign-in-with-twitter', (req, res) => { 
-  
   const url = "https://api.twitter.com/oauth/request_token"; 
-  const parameters = [ 
-    {key:"oauth_callback", value: process.env.OAUTH_CALLBACK}
-  ]; 
-  const options = { 
-    parameters, 
-    isUserContextAuth: true,
-  }
+  const twAPI = new TwitterApi(); 
+  twAPI.setParameter('oauth_callback', process.env.OAUTH_CALLBACK)
 
-  customFetch("POST", url, options)
+  twAPI.post(url)
   .then(response => { 
     const oauthParams = parseOAuthParams(response); 
     const oauthTokenValue = oauthParams["oauth_token"]; 
- 
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`; 
+    
+    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`;  
     res.send(url); 
   })
-  .catch(error => res.send(error))
 })
 
 
@@ -52,22 +41,13 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
 app.get("/api/access-token", (req, res) => { 
   const oauthToken = req.query.oauth_token; 
   const body = `oauth_verifier=${req.query.oauth_verifier}`; 
-  
+
   const url = "https://api.twitter.com/oauth/access_token"; 
-  const parameters = [ 
-    {key:"oauth_token", value: oauthToken}
-  ]; 
-  const method = "POST"
+  const twAPI = new TwitterApi(); 
+  twAPI.setParameter('oauth_token', oauthToken)
 
-  const options = { 
-    parameters,
-    body, 
-    isUserContextAuth: true
-  }
-
-  customFetch(method, url, options)
+  twAPI.post(url, undefined, body)
   .then(response => { 
-
     const oauthParams = parseOAuthParams(response); 
       const {
         user_id, 
@@ -77,11 +57,10 @@ app.get("/api/access-token", (req, res) => {
       
       users[user_id] = [oauth_token, oauth_token_secret]; 
 
-
       res.header('Set-Cookie', `user_id=${user_id}`);
       
     res.json(oauthParams); 
-  }) 
+  })
 })
 
 
@@ -101,7 +80,8 @@ app.get("/api/profile-picture", (req, res) => {
  
   twAPI.get(url, query)
   .then(response => {
-    const profilePicUrl = response['profile_image_url_https']; 
+    const json = JSON.parse(response);
+    const profilePicUrl = json['profile_image_url_https']; 
     res.json(profilePicUrl); 
   })
 })
@@ -120,30 +100,12 @@ app.get("/api/profile-info", (req, res) => {
  
   twAPI.get(url, query)
   .then(response => {
-    res.json(response)
+    const json = JSON.parse(response);
+    res.json(json)
   })
  
 
 })
-
-
-
-
-// app.get("/api/profile-info", (req, res) => { 
-//   const cookies = req.cookies;
-//   const userId = cookies.user_id;
-//   const method = "GET";
-//   const url = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
-//   const isBearerAuth = true; 
-
-//   customFetch(method, url, {isBearerAuth})
-//   .then(response => {
-//     const responseJSON = JSON.parse(response); 
-//     res.json(responseJSON); 
-//   })
-
-// })
-
 
 
 
@@ -159,7 +121,8 @@ app.get("/api/home-timeline", (req, res) => {
  
   twAPI.get(url)
   .then(response => {
-    res.json(response)
+    const json = JSON.parse(response);
+    res.json(json)
   })
 })
 
@@ -178,7 +141,8 @@ app.get("/api/trends", (req, res) => {
 
   twAPI.get(url, query)
   .then(response => { 
-    res.json(response); 
+    const json = JSON.parse(response);
+    res.json(json); 
   })
 })
 
@@ -195,7 +159,8 @@ app.get("/api/search", (req, res) => {
 
   twAPI.get(url, query)
   .then(response => {
-    res.json(response); 
+    const json = JSON.parse(response);
+    res.json(json);  
   })
 })
 
@@ -212,7 +177,8 @@ app.get("/api/status/update", (req, res) => {
 
   twAPI.post(url, query)
   .then(response => { 
-    res.json(response);
+    const json = JSON.parse(response);
+    res.json(json); 
   })
 })
 

@@ -8,6 +8,7 @@ const ASCII_CHARACTERS = [
 
 
 const percentEncode = (string) => { 
+
   let encodedString = ''; 
   string.split("").forEach(char => {
       if (ASCII_CHARACTERS.includes(char)) { 

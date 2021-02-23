@@ -6,12 +6,12 @@ const {
 
 class TwitterApi { 
   constructor() { 
-    this.baseUrl = null;
+    this.baseUrl = undefined;
     this.parameters = [];
-    this.oauth_token = null;
-    this.oauth_token_secret = null;
-    this.queryParam = null; 
-    this.body = null; 
+    this.oauth_token = undefined;
+    this.oauth_token_secret = undefined;
+    this.queryParam = undefined; 
+    this.body = undefined; 
   }
   
   get(baseUrl, queryParam) { 
@@ -63,10 +63,12 @@ class TwitterApi {
     
     const promise = new Promise((resolve, reject) => { 
       xhr.addEventListener("load", function() { 
-        const response = JSON.parse(this.responseText); 
-        resolve(response); 
+       
+        // const response = JSON.parse(this.responseText); 
+        resolve(this.responseText); 
       })
       xhr.addEventListener("error", function() { 
+       
         reject(this.responseText); 
       })
 
