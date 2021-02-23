@@ -11,7 +11,7 @@ const {
   const customFetch = require('./customFetch'); 
 const TwitterApi = require('./TwitterAPI/TwitterAPI'); 
 const twAPI = new TwitterApi(); 
-
+const users = require('./TwitterAPI/users'); 
 
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 app.use(cookieParser()); 
@@ -77,10 +77,10 @@ app.get("/api/access-token", (req, res) => {
         const authCookie = `${param}=${oauthParams[param]};`;
         authCookies.push(authCookie); 
       }
+      
 
-
-      twAPI.setAuthToken(oauthParams.oauth_token); 
-      twAPI.setAuthTokenSecret(oauthParams.oauth_token_secret)
+      // twAPI.setAuthToken(oauthParams.oauth_token); 
+      // twAPI.setAuthTokenSecret(oauthParams.oauth_token_secret)
 
 
       res.header('Set-Cookie', authCookies);
@@ -90,43 +90,50 @@ app.get("/api/access-token", (req, res) => {
 })
 
 
-app.get("/api/profile-picture", (req, res) => { 
-  const cookies = req.cookies;
-  const userId = cookies.user_id;
-  const method = "GET";
-  const url = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
-  const isBearerAuth = true; 
+// app.get("/api/profile-picture", (req, res) => { 
+//   const cookies = req.cookies;
+//   const userId = cookies.user_id;
+//   const method = "GET";
+//   const url = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
+//   const isBearerAuth = true; 
 
-  customFetch(method, url, {isBearerAuth})
-  .then(response => {
-    const responseJSON = JSON.parse(response); 
-    const profilePicUrl = responseJSON['profile_image_url_https']; 
-    res.json(profilePicUrl); 
-  })
+//   customFetch(method, url, {isBearerAuth})
+//   .then(response => {
+//     const responseJSON = JSON.parse(response); 
+//     const profilePicUrl = responseJSON['profile_image_url_https']; 
+//     res.json(profilePicUrl); 
+//   })
 
-})
+// })
 
-app.get("/api/profile-info", (req, res) => { 
-  const cookies = req.cookies;
-  const userId = cookies.user_id;
-  const method = "GET";
-  const url = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
-  const isBearerAuth = true; 
+// app.get("/api/profile-info", (req, res) => { 
+//   const cookies = req.cookies;
+//   const userId = cookies.user_id;
+//   const method = "GET";
+//   const url = `https://api.twitter.com/1.1/users/show.json?user_id=${userId}`; 
+//   const isBearerAuth = true; 
 
-  customFetch(method, url, {isBearerAuth})
-  .then(response => {
-    const responseJSON = JSON.parse(response); 
-    res.json(responseJSON); 
-  })
+//   customFetch(method, url, {isBearerAuth})
+//   .then(response => {
+//     const responseJSON = JSON.parse(response); 
+//     res.json(responseJSON); 
+//   })
 
-})
+// })
 
 
 
 
 app.get("/api/home-timeline", (req, res) => { 
   const url = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-
+  //get user_id from cookie 
+  const cookies = req.cookies;
+  const userId = cookies.user_id;
+  const {oauth_token, oauth_token_secret} = cookies; 
+  //get tokens from users object 
+  twAPI.setAuthToken(oauth_token); 
+  twAPI.setAuthTokenSecret(oauth_token_secret); 
+  //set tokens for twAPI 
   twAPI.get(url)
   .then(response => {
     res.json(response)
@@ -134,35 +141,35 @@ app.get("/api/home-timeline", (req, res) => {
 })
 
 //get trends in the United States. Need to make this more dynamic
-app.get("/api/trends", (req, res) => { 
-  const url = "https://api.twitter.com/1.1/trends/place.json"; 
-  const query = {"id": "23424977"}; 
+// app.get("/api/trends", (req, res) => { 
+//   const url = "https://api.twitter.com/1.1/trends/place.json"; 
+//   const query = {"id": "23424977"}; 
 
-  twAPI.get(url, query)
-  .then(response => { 
-    res.json(response); 
-  })
-})
+//   twAPI.get(url, query)
+//   .then(response => { 
+//     res.json(response); 
+//   })
+// })
 
-app.get("/api/search", (req, res) => { 
-  const url = "https://api.twitter.com/1.1/search/tweets.json"; 
-  const query = {"q": req.query.q }
+// app.get("/api/search", (req, res) => { 
+//   const url = "https://api.twitter.com/1.1/search/tweets.json"; 
+//   const query = {"q": req.query.q }
 
-  twAPI.get(url, query)
-  .then(response => {
-    res.json(response); 
-  })
-})
+//   twAPI.get(url, query)
+//   .then(response => {
+//     res.json(response); 
+//   })
+// })
 
-app.get("/api/status/update", (req, res) => { 
-  const url = "https://api.twitter.com/1.1/statuses/update.json";
-  const query = {"status":req.query.status}
+// app.get("/api/status/update", (req, res) => { 
+//   const url = "https://api.twitter.com/1.1/statuses/update.json";
+//   const query = {"status":req.query.status}
 
-  twAPI.post(url, query)
-  .then(response => { 
-    res.json(response);
-  })
-})
+//   twAPI.post(url, query)
+//   .then(response => { 
+//     res.json(response);
+//   })
+// })
 
 
 
