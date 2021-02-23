@@ -18,14 +18,9 @@ app.use(cookieParser());
 
 
 //TODO: 
-//1. put oauth_consumer_key as default param (done)
-//2. set cookies to be signed (no longer doing)
-//3. parse signed cookies (no longer doing)
 //4. take care of twitter sending technical error (HTML)
 
 //steps for implementing Twitter API 
-//1. Copy twitterOAuthSignature (did something else)
-//2. Make all functions, methods (did something else)
 //3. Use TwitterApi for basic routes (in progress. 2 more routes)
 //4. Handle errors 
 //5. Test on heroku
