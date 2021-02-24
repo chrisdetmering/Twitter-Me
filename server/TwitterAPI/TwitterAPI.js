@@ -10,20 +10,20 @@ class TwitterApi {
     this.parameters = [];
     this.oauth_token = undefined;
     this.oauth_token_secret = undefined;
-    this.queryParam = undefined; 
+    this.queryParams = []; 
     this.body = undefined; 
   }
   
-  get(baseUrl, queryParam) { 
+  get(baseUrl, queryParams) { 
     this.setBaseUrl(baseUrl);
-    this.setQueryParam(queryParam); 
+    this.setQueryParams(queryParams); 
     return this.request("GET"); 
   }
 
   
-  post(baseUrl, queryParam, body) { 
+  post(baseUrl, queryParams, body) { 
     this.setBaseUrl(baseUrl);
-    this.setQueryParam(queryParam); 
+    this.setQueryParams(queryParams); 
     return this.request("POST", body); 
   }
 
@@ -31,44 +31,49 @@ class TwitterApi {
     this.baseUrl = baseUrl; 
   }
 
-  // setParameters(parameters) { 
-  //   this.parameters = [...this.parameters, ...parameters]; 
-  // }
 
-  setQueryParam(queryParam) { 
-    if (queryParam) { 
-      const keys = Object.keys(queryParam); 
-      const key = keys[0]; 
-      const value = queryParam[key]; 
-      this.queryParam = {key, value}
-    } else { 
-      this.queryParam = null; 
+  setQueryParams(queryParams) { 
+    if (queryParams) { 
+      this.queryParams = Object.keys(queryParams).map(key => { 
+        const value = queryParams[key]; 
+        return {key, value}
+      });
+    } 
+  }
+
+
+  isQueryParams() { 
+    return this.queryParams.length > 0;
+  }
+  
+  createUrl() { 
+    if (this.isQueryParams()) { 
+      return this.createUrlWithParams(); 
     }
+    return this.baseUrl; 
   }
 
-  getBaseUrlWithQueryParams() { 
-    return `${this.baseUrl}?${this.queryParam.key}=${this.queryParam.value}`;
+  createUrlWithParams() { 
+    const queryString = this.queryParams.map(
+      param => `${param.key}=${param.value}`
+    ).join('&'); 
+    return `${this.baseUrl}?${queryString}`; 
   }
+
 
   request(method, body) { 
     const xhr = new XMLHttpRequest(); 
-    const url = this.queryParam ? this.getBaseUrlWithQueryParams() : this.baseUrl; 
+    const url = this.createUrl(); 
     
     xhr.open(method, url);
-    
-    const AuthorizationHeader =  this.getSignedHeader(method); 
-  
     xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", AuthorizationHeader);
+    xhr.setRequestHeader("Authorization", this.getSignedHeader(method));
     
     const promise = new Promise((resolve, reject) => { 
       xhr.addEventListener("load", function() { 
-       
-        // const response = JSON.parse(this.responseText); 
         resolve(this.responseText); 
       })
       xhr.addEventListener("error", function() { 
-       
         reject(this.responseText); 
       })
 
@@ -82,18 +87,18 @@ class TwitterApi {
   getSignedHeader(method) { 
     let parameters; 
 
-    if (this.queryParam) { 
+    if (this.queryParams) { 
       parameters = this.getParametersWithData(); 
     } else { 
       parameters = this.parameters; 
     }
-   
+ 
     return createSignedHeader(parameters, this.baseUrl, this.oauth_token_secret, method);
   }
 
 
   getParametersWithData() { 
-    return [...this.parameters, this.queryParam]; 
+    return [...this.parameters, ...this.queryParams]; 
   }
 
   setParameter(key, value) { 

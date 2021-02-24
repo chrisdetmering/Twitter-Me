@@ -188,16 +188,17 @@ app.get("/api/status/update", (req, res) => {
 //update name & description 
 app.post('/api/profile-update', (req, res) => { 
   const url = "https://api.twitter.com/1.1/account/update_profile.json";
-  const {name} = req.query;
+  const {name, description} = req.query;
   const cookies = req.cookies;
   const userId = cookies.user_id;
   const [oauth_token, oauth_token_secret] = users[userId]; 
 
+  // console.log(userId, oauth_token, oauth_token_secret)
   const twAPI = new TwitterApi(); 
   twAPI.setAuthToken(oauth_token); 
   twAPI.setAuthTokenSecret(oauth_token_secret); 
 
-  twAPI.post(url, {name})
+  twAPI.post(url, {name, description})
   .then(response => { 
     const json = JSON.parse(response);
     console.log(response)

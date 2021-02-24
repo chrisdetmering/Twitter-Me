@@ -21,11 +21,13 @@ export default function Profile(props) {
       setName(response.name);
       setDescription(response.description);
       setProfileDetails(response);
+      
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
       console.error(error); 
     })
+    
   }
 
   function handleEditProfileClick() { 
@@ -42,11 +44,9 @@ export default function Profile(props) {
     }
   }
 
-
-  //need to handle errors
   function handleEditProfileSubmit(event){ 
     event.preventDefault();
-    fetch(`/api/profile-update?name=${name}`, { 
+    fetch(`/api/profile-update?name=${name}&description=${description}`, { 
       method: "POST"
     })
     .then(data => {
@@ -63,7 +63,7 @@ export default function Profile(props) {
       alert(`There was the following network error ${error}`)
       console.error(error); 
     })
-    
+    .finally(() => setShowModal(false));
   }
 
   function handleDescriptionChange(event) { 
