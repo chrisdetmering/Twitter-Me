@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'; 
 
 import NavBar from "../NavBar/NavBar"; 
+import ProfileModal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
 export default function Profile(props) { 
   const [profileImageUrl, setProfileImageUrl] = useState(''); 
@@ -11,11 +12,12 @@ export default function Profile(props) {
   const [followers, setFollowers] = useState(''); 
   const [following, setFollowing] = useState(''); 
   const [profileBannerUrl, setProfileBannerUrl] = useState(''); 
+  const [isModalDisplayed, setIsModalDisplayed] = useState(false); 
   const { setIsLoggedIn } = props; 
 
 
   useEffect(() => { 
-    fetch('api/profile-info')
+    fetch('api/profile-details')
     .then(data => data.json())
     .then(response => { 
       console.log(response)
@@ -37,8 +39,7 @@ export default function Profile(props) {
 
 
   function handleEditProfileClick() { 
-    alert('modal pop up'); 
-
+    setIsModalDisplayed(!isModalDisplayed); 
   }
 
 
@@ -49,6 +50,7 @@ export default function Profile(props) {
     <img src={profileBannerUrl} alt="profile-banner"/>
     <img src={profileImageUrl} alt="profile-pic"/> 
     <button onClick={handleEditProfileClick}>Edit profile</button>
+    {isModalDisplayed && <ProfileModal close={setIsModalDisplayed} />}
     <p><strong>{name}</strong></p>
     <p>{screenName}</p>
     <p>{description}</p>

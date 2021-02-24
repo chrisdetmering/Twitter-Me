@@ -88,7 +88,7 @@ app.get("/api/profile-picture", (req, res) => {
 })
 
 
-app.get("/api/profile-info", (req, res) => { 
+app.get("/api/profile-details", (req, res) => { 
   const cookies = req.cookies;
   const userId = cookies.user_id;
   const url = `https://api.twitter.com/1.1/users/show.json`; 
