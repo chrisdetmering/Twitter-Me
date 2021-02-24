@@ -165,6 +165,7 @@ app.get("/api/search", (req, res) => {
   })
 })
 
+//TODO: update this to be status-update
 app.get("/api/status/update", (req, res) => { 
   const url = "https://api.twitter.com/1.1/statuses/update.json";
   const query = {"status":req.query.status}
@@ -182,6 +183,30 @@ app.get("/api/status/update", (req, res) => {
     res.json(json); 
   })
 })
+
+
+//update name & description 
+app.post('/api/profile-update', (req, res) => { 
+  const url = "https://api.twitter.com/1.1/account/update_profile.json";
+  const {name} = req.query;
+  const cookies = req.cookies;
+  const userId = cookies.user_id;
+  const [oauth_token, oauth_token_secret] = users[userId]; 
+
+  const twAPI = new TwitterApi(); 
+  twAPI.setAuthToken(oauth_token); 
+  twAPI.setAuthTokenSecret(oauth_token_secret); 
+
+  twAPI.post(url, {name})
+  .then(response => { 
+    const json = JSON.parse(response);
+    console.log(response)
+    res.json(json); 
+  })
+})
+//update profile banner 
+
+//update profile image 
 
 
 

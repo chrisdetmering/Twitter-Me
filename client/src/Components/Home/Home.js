@@ -37,7 +37,10 @@ export default function Home(props) {
         setHomeTimelineTweets(response); 
       }
     })
-    .catch(error => console.error(error))
+    .catch(error => { 
+      alert(`There was the following network error ${error}`)
+      console.error(error); 
+    })
   }
 
 
@@ -57,7 +60,10 @@ export default function Home(props) {
       }
       
     })
-    .catch(error => console.error(error))
+    .catch(error => { 
+      alert(`There was the following network error ${error}`)
+      console.error(error); 
+    })
   }
 
   return(<>

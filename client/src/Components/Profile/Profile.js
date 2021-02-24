@@ -1,66 +1,103 @@
 import {useEffect, useState} from 'react'; 
-
+import Details from "./Details/Details";
 import NavBar from "../NavBar/NavBar"; 
-import ProfileModal from "../Util/UI/Modals/Modal";
+import Modal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
 export default function Profile(props) { 
-  const [profileImageUrl, setProfileImageUrl] = useState(''); 
-  const [name, setName] = useState(''); 
-  const [screenName, setScreenName] = useState(''); 
-  const [description, setDescription] = useState('');
-  const [dateJoined, setDateJoined] = useState(''); 
-  const [followers, setFollowers] = useState(''); 
-  const [following, setFollowing] = useState(''); 
-  const [profileBannerUrl, setProfileBannerUrl] = useState(''); 
-  const [isModalDisplayed, setIsModalDisplayed] = useState(false); 
   const { setIsLoggedIn } = props; 
-
+  const [profileDetails, setProfileDetails] = useState(null); 
+  const [showModal, setShowModal] = useState(false);  
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => { 
+    getProfileDetails(); 
+  }, []);
+
+  function getProfileDetails() { 
     fetch('api/profile-details')
     .then(data => data.json())
     .then(response => { 
-      console.log(response)
-      setProfileDetails(response)
+      setName(response.name);
+      setDescription(response.description);
+      setProfileDetails(response);
     })
-  }, []);
-
-  function setProfileDetails(response) { 
-    setName(response.name); 
-    setScreenName(response.screen_name); 
-    setDescription(response.description); 
-    setDateJoined(response.created_at)
-    setFollowers(response.followers_count); 
-    setFollowing(response.friends_count); 
-    setProfileBannerUrl(response.profile_banner_url); 
-    setProfileImageUrl(response.profile_image_url_https); 
+    .catch(error => { 
+      alert(`There was the following network error ${error}`)
+      console.error(error); 
+    })
   }
-
-
 
   function handleEditProfileClick() { 
-    setIsModalDisplayed(!isModalDisplayed); 
+   
+    setShowModal(true);
   }
 
+  function handleCloseModalClick(event) { 
+    const isBackDropClicked = event.target.id === "ModalBackDrop"; 
+    const isCloseButtonClicked = event.target.id === "ModalCloseButton"; 
+
+    if (isBackDropClicked || isCloseButtonClicked) { 
+      setShowModal(false); 
+    }
+  }
+
+
+  //need to handle errors
+  function handleEditProfileSubmit(event){ 
+    event.preventDefault();
+    fetch(`/api/profile-update?name=${name}`, { 
+      method: "POST"
+    })
+    .then(data => {
+        return data.json()
+    })
+    .then(response => { 
+      if (response) { 
+        setName(response.name);
+        setDescription(response.description);
+        setProfileDetails(response);
+      }
+    })
+    .catch(error => { 
+      alert(`There was the following network error ${error}`)
+      console.error(error); 
+    })
+    
+  }
+
+  function handleDescriptionChange(event) { 
+    const newDescription = event.target.value; 
+    setDescription(newDescription);
+  }
+
+  function handleNameChange(event) { 
+    const newName = event.target.value; 
+    setName(newName); 
+  }
 
 
   return(<>
+    <Modal show={showModal} close={handleCloseModalClick}>
+      <h1>Edit Profile</h1> 
+      <form onSubmit={handleEditProfileSubmit}>
+          <input onChange={handleNameChange} value={name}/>
+          <br />
+          <textarea
+            rows="4"
+            cols="50"
+            onChange={handleDescriptionChange} value={description}>
+          </textarea>
+          <br />
+          <input type="submit" value="Save"/>
+      </form>
+    </Modal>
     <NavBar logout={() => setIsLoggedIn(false)}/>
-    <h1>Profile</h1>
-    <img src={profileBannerUrl} alt="profile-banner"/>
-    <img src={profileImageUrl} alt="profile-pic"/> 
-    <button onClick={handleEditProfileClick}>Edit profile</button>
-    {isModalDisplayed && <ProfileModal close={setIsModalDisplayed} />}
-    <p><strong>{name}</strong></p>
-    <p>{screenName}</p>
-    <p>{description}</p>
-    <p>{dateJoined}</p>
-    <p>Following {following}</p>
-    <p>Followers {followers}</p>
-    <ul>
-      {/*tweets*/}
-    </ul>
+
+    <Details 
+      details={profileDetails}
+      onEditButtonClick={handleEditProfileClick}
+    />
     <TweetSearch />
-   
   </>); 
 }
