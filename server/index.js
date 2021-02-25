@@ -193,7 +193,6 @@ app.post('/api/profile-update', (req, res) => {
   const userId = cookies.user_id;
   const [oauth_token, oauth_token_secret] = users[userId]; 
 
-  // console.log(userId, oauth_token, oauth_token_secret)
   const twAPI = new TwitterApi(); 
   twAPI.setAuthToken(oauth_token); 
   twAPI.setAuthTokenSecret(oauth_token_secret); 

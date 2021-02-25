@@ -1,11 +1,11 @@
 import {useState, useEffect} from "react"; 
 import NavBar from "../NavBar/NavBar"; 
 import TweetSearch from '../TweetSearch/TweetSearch'; 
+import NewTweet from "../Tweets/NewTweet/NewTweet"; 
 
 export default function Home(props) { 
   const [profileImageUrl, setProfileImageUrl] = useState(''); 
   const [homeTimelineTweets, setHomeTimelineTweets] = useState([]); 
-  const [newTweet, setNewTweet] = useState(''); 
   const {setIsLoggedIn} = props; 
   
   // useEffect(() => { 
@@ -44,36 +44,13 @@ export default function Home(props) {
   }
 
 
-  function handleNewTweetChange(e) { 
-    e.preventDefault(); 
-    const newTweet = e.target.value;
-    setNewTweet(newTweet); 
-  } 
-
-
-  function handleNewTweet() { 
-    fetch(`/api/status/update?status=${newTweet}`)
-    .then(response => {
-      if (response.ok) { 
-        getTimelineTweets();  
-        setNewTweet(''); 
-      }
-      
-    })
-    .catch(error => { 
-      alert(`There was the following network error ${error}`)
-      console.error(error); 
-    })
-  }
 
   return(<>
     <NavBar logout={() => setIsLoggedIn(false)}/>
     {/*TweetCard*/}
     <h1>Home</h1>
     {/* <img src={profileImageUrl} alt="profile-pic"/>  */}
-    <input placeholder="what's happening?" onChange={handleNewTweetChange} value={newTweet}/>
-    <button onClick={handleNewTweet}>Tweet</button>
-
+    <NewTweet getTweets={getTimelineTweets}/>
 
     {/*Timeline */}
     <ul>

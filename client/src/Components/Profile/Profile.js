@@ -3,13 +3,16 @@ import Details from "./Details/Details";
 import NavBar from "../NavBar/NavBar"; 
 import Modal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
+
+
+
 export default function Profile(props) { 
   const { setIsLoggedIn } = props; 
   const [profileDetails, setProfileDetails] = useState(null); 
   const [showModal, setShowModal] = useState(false);  
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-
+  const [profileImageUrl, setProfileImageUrl] = useState('')
   useEffect(() => { 
     getProfileDetails(); 
   }, []);
@@ -20,6 +23,7 @@ export default function Profile(props) {
     .then(response => { 
       setName(response.name);
       setDescription(response.description);
+      setProfileImageUrl(response.profile_image_url);
       setProfileDetails(response);
       
     })
@@ -81,6 +85,10 @@ export default function Profile(props) {
     <Modal show={showModal} close={handleCloseModalClick}>
       <h1>Edit Profile</h1> 
       <form onSubmit={handleEditProfileSubmit}>
+          <input type="file"/>
+          <br />
+          <img src={profileImageUrl}/>
+          <br />
           <input onChange={handleNameChange} value={name}/>
           <br />
           <textarea
