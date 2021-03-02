@@ -5,6 +5,7 @@ import {
 } from "react-router-dom"; 
 
 export default function GetCredentials(props) { 
+  const {login} = props; 
   const location = useLocation(); 
   const history = useHistory(); 
   const params = new URLSearchParams(location.search);
@@ -34,10 +35,12 @@ export default function GetCredentials(props) {
     
     })
     .then(() => { 
-      props.login(true); 
+      login(true); 
       history.push('/home'); 
     })
     .catch(error => console.log(`Network error: ${error}`)); 
+    //TODO: figure out what to do with this
+    // eslint-disable-next-line
   }, [oauthToken, oauthVerifier])
   
 
