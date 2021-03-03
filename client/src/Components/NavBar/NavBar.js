@@ -6,6 +6,7 @@ import "./NavBar.css";
 
 
 export default function NavBar(props) { 
+  const {getTweets} = props; 
   const [showModal, setShowModal] = useState(false); 
 
   function handleTweetButtonClick() { 
@@ -26,7 +27,7 @@ export default function NavBar(props) {
   //TODO: need to close modal on new tweet click
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>
-      <NewTweet />
+      <NewTweet getTweets={getTweets} showModal={setShowModal}/>
     </Modal>
     <ul>
       <li>

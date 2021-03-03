@@ -12,10 +12,17 @@ export default function Profile(props) {
   const [showModal, setShowModal] = useState(false);  
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [profileImageUrl, setProfileImageUrl] = useState('')
+  const [profileImageUrl, setProfileImageUrl] = useState(''); 
+  const [image, setImage] = useState(null); 
+  const [userTimeline, setUserTimeline] = useState([]); 
+
   useEffect(() => { 
     getProfileDetails(); 
   }, []);
+
+  useEffect(() => { 
+    getUserTimeline(); 
+  }, []); 
 
   function getProfileDetails() { 
     fetch('api/profile-details')
@@ -34,8 +41,22 @@ export default function Profile(props) {
     
   }
 
+  
+
+  function getUserTimeline() { 
+    fetch('api/user-timeline')
+    .then(data => data.json())
+    .then(response => {
+      setUserTimeline(response); 
+    })
+    .catch(error => { 
+      console.error(error); 
+    }); 
+  }
+
+
+
   function handleEditProfileClick() { 
-   
     setShowModal(true);
   }
 
@@ -70,6 +91,15 @@ export default function Profile(props) {
     .finally(() => setShowModal(false));
   }
 
+  function updateProfileImage() { 
+    fetch(`/api/profile-image-update?image=${image}`, { 
+      method: "POST"
+    })
+    .then(data => data.json())
+    .then(response => console.log(response))
+  }
+
+
   function handleDescriptionChange(event) { 
     const newDescription = event.target.value; 
     setDescription(newDescription);
@@ -80,14 +110,22 @@ export default function Profile(props) {
     setName(newName); 
   }
 
+  function onProfileImageChange(event) { 
+    const imageJPG = event.target.files[0].name; 
+    setImage(imageJPG); 
+  }
+
+  useEffect(() => { 
+    console.log(image); 
+  }, [image])
 
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>
       <h1>Edit Profile</h1> 
       <form onSubmit={handleEditProfileSubmit}>
-          <input type="file"/>
+          <input type="file" onChange={onProfileImageChange} />
           <br />
-          <img src={profileImageUrl}/>
+          <img src={profileImageUrl} alt=''/>
           <br />
           <input onChange={handleNameChange} value={name}/>
           <br />
@@ -100,12 +138,15 @@ export default function Profile(props) {
           <input type="submit" value="Save"/>
       </form>
     </Modal>
-    <NavBar logout={() => setIsLoggedIn(false)}/>
+    <NavBar logout={() => setIsLoggedIn(false)} getTweets={getUserTimeline}/>
 
     <Details 
       details={profileDetails}
       onEditButtonClick={handleEditProfileClick}
     />
+    {userTimeline.map(tweet => (
+      <li key={tweet.id}>{tweet.text}</li>
+    ))}
     <TweetSearch />
   </>); 
 }

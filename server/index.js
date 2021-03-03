@@ -127,6 +127,25 @@ app.get("/api/home-timeline", (req, res) => {
   })
 })
 
+app.get("/api/user-timeline", (req, res) => { 
+  const url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+  const cookies = req.cookies;
+  const user_id = cookies.user_id;
+  const [oauth_token, oauth_token_secret] = users[user_id]; 
+
+  const twAPI = new TwitterApi(); 
+  twAPI.setAuthToken(oauth_token); 
+  twAPI.setAuthTokenSecret(oauth_token_secret); 
+ 
+  twAPI.get(url, {user_id})
+  .then(response => { 
+    const json = JSON.parse(response);
+    res.json(json)
+  })
+})
+
+
+
 //get trends in the United States. Need to make this more dynamic
 app.get("/api/trends", (req, res) => { 
   const url = "https://api.twitter.com/1.1/trends/place.json"; 
@@ -200,14 +219,31 @@ app.post('/api/profile-update', (req, res) => {
   twAPI.post(url, {name, description})
   .then(response => { 
     const json = JSON.parse(response);
-    console.log(response)
     res.json(json); 
   })
 })
 //update profile banner 
 
 //update profile image 
+//TODO: if enough time
+// app.post('/api/profile-image-update', (req, res) => { 
+//   const url = "https://api.twitter.com/1.1/account/update_profile_image.json";
+//   const {image} = req.query;
+//   console.log(image)
+//   const cookies = req.cookies;
+//   const userId = cookies.user_id;
+//   const [oauth_token, oauth_token_secret] = users[userId]; 
 
+//   const twAPI = new TwitterApi(); 
+//   twAPI.setAuthToken(oauth_token); 
+//   twAPI.setAuthTokenSecret(oauth_token_secret); 
+
+//   twAPI.post(url, {image})
+//   .then(response => { 
+//     console.log('response', response); 
+//     // res.json(json); 
+//   })
+// })
 
 
 app.get('*', (req, res) => { 

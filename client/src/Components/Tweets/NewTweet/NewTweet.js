@@ -2,6 +2,8 @@ import {useState} from 'react';
 import './NewTweet.css'; 
 
 export default function NewTweet(props) { 
+  const {getTweets, showModal} = props; 
+  console.log(showModal)
   const [newTweet, setNewTweet] = useState(''); 
 
 
@@ -9,7 +11,7 @@ export default function NewTweet(props) {
     fetch(`/api/status/update?status=${newTweet}`)
     .then(response => {
       if (response.ok) { 
-        props.getTweets();  
+        getTweets();  
         setNewTweet(''); 
       }
       
@@ -18,6 +20,7 @@ export default function NewTweet(props) {
       alert(`There was the following network error ${error}`)
       console.error(error); 
     })
+    .finally(() => showModal(false)); 
   }
 
 

@@ -46,11 +46,14 @@ export default function Home(props) {
 
 
   return(<>
-    <NavBar logout={() => setIsLoggedIn(false)}/>
+    <NavBar 
+      logout={() => setIsLoggedIn(false)}
+      getTimelineTweets={getTimelineTweets}
+    />
     {/*TweetCard*/}
     <h1>Home</h1>
     {/* <img src={profileImageUrl} alt="profile-pic"/>  */}
-    <NewTweet getTweets={getTimelineTweets}/>
+    {/* <NewTweet getTweets={getTimelineTweets}/> */}
 
     {/*Timeline */}
     <ul>
