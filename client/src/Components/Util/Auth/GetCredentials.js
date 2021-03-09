@@ -5,6 +5,7 @@ import {
 } from "react-router-dom"; 
 
 export default function GetCredentials(props) { 
+  const {login} = props; 
   const location = useLocation(); 
   const history = useHistory(); 
   const params = new URLSearchParams(location.search);
@@ -28,16 +29,18 @@ export default function GetCredentials(props) {
       //TODO: make this safer
       //Just temporality storing use auth information in local storage until 
       //I can figure out a more secure way of doing it without a DB
-      for (const param in response) { 
-        localStorage.setItem(param, response[param]); 
-      }
+      // for (const param in response) { 
+      //   localStorage.setItem(param, response[param]); 
+      // }
     
     })
     .then(() => { 
-      props.login(true); 
+      login(true); 
       history.push('/home'); 
     })
     .catch(error => console.log(`Network error: ${error}`)); 
+    //TODO: figure out what to do with this
+    // eslint-disable-next-line
   }, [oauthToken, oauthVerifier])
   
 
