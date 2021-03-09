@@ -3,7 +3,6 @@ import './NewTweet.css';
 
 export default function NewTweet(props) { 
   const {getTweets, showModal} = props; 
-  console.log(showModal)
   const [newTweet, setNewTweet] = useState(''); 
 
 

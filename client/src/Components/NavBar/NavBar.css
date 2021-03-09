@@ -1,3 +1,50 @@
-.active { 
-  color: blue; 
+.nav-bar-items { 
+  display: inline-block; 
+  margin: 20px 0 0; 
 }
+
+.logo { 
+  height: 20px; 
+  margin-left: 10px;
+}
+
+.logo-container { 
+  width: 50px; 
+}
+
+.nav-bar-item { 
+  padding: 12px 0; 
+}
+
+.nav-bar-item:hover { 
+  background-color: var(--light-blue); 
+  border-radius: 30px; 
+}
+
+.link { 
+  color: black; 
+  font-weight: 700; 
+  font-size: 19px; 
+  display: flex; 
+  align-items: center; 
+}
+
+.link.active { 
+  color: var(--blue);
+}
+
+.icon { 
+  color: black; 
+  margin-left: 10px;
+}
+
+.link.active > span.icon { 
+  color: var(--blue);
+}
+
+.text { 
+  margin: 0 0 0 20px; 
+}
+
+
+

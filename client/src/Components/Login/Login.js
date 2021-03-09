@@ -1,7 +1,8 @@
 import React from 'react'; 
 import "./Login.css"; 
-import LogoWhite from "./TwitterLogoWhite.png"; 
-import LogoBlue from "./TwitterLogoBlue.png"; 
+import Button from "../Util/UI/Buttons/Button";
+import LogoWhite from "../../images/TwitterLogoWhite.png"; 
+import LogoBlue from "../../images/TwitterLogoBlue.png"; 
 
 export default function Login() { 
   function handleTwitterLoginClick() { 
@@ -33,8 +34,16 @@ export default function Login() {
             <p className="sign-up-notice">*You will be taken to the actual Twitter website to make your 
               account. You will then have to navigate back to this site 
               to sign in with Twitter.*</p>
-            <button className="sign-up-button" onClick={handleSignUpButtonClick}>Sign Up</button>
-            <button className="login-button" onClick={handleTwitterLoginClick}>Sign in with Twitter</button>
+              <Button 
+                classes={"large dark"}
+                click={handleSignUpButtonClick}>
+                Sign Up
+              </Button>
+              <Button
+                classes={"large light"}
+                click={handleTwitterLoginClick}>
+                Sign in with Twitter
+              </Button>
           </div>
       </div>
     </div>
