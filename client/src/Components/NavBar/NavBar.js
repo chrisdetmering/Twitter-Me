@@ -14,17 +14,14 @@ export default function NavBar(props) {
   }
 
   function handleCloseModalClick(event) { 
-    const isBackDropClicked = event.target.id === "ModalBackDrop"; 
-    const isCloseButtonClicked = event.target.id === "ModalCloseButton"; 
+    const isBackDropClicked = event.target.id === "modal-backdrop"; 
+    const isCloseButtonClicked = event.target.id === "modal-close-button"; 
 
     if (isBackDropClicked || isCloseButtonClicked) { 
       setShowModal(false); 
     }
   }
 
-
-  //TODO: need to set new timeline 
-  //TODO: need to close modal on new tweet click
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>
       <NewTweet getTweets={getTweets} showModal={setShowModal}/>

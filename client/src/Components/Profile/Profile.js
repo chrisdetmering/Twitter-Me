@@ -61,8 +61,8 @@ export default function Profile(props) {
   }
 
   function handleCloseModalClick(event) { 
-    const isBackDropClicked = event.target.id === "ModalBackDrop"; 
-    const isCloseButtonClicked = event.target.id === "ModalCloseButton"; 
+    const isBackDropClicked = event.target.id === "modal-backdrop"; 
+    const isCloseButtonClicked = event.target.id === "modal-close-button"; 
 
     if (isBackDropClicked || isCloseButtonClicked) { 
       setShowModal(false); 

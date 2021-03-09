@@ -7,9 +7,9 @@ export default function Modal(props) {
   }
   
   return(<>
-      <div onClick={props.close} id="ModalBackDrop" className="Modal">
-        <div className="ModalContent">
-        <button onClick={props.close} id="ModalCloseButton">Close</button>
+      <div onClick={props.close} id="modal-backdrop" className="modal">
+        <div className="modal-content">
+        <button onClick={props.close} id="modal-close-button">Close</button>
               {props.children}
         </div>
       </div>
