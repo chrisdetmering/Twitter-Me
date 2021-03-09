@@ -14,6 +14,9 @@ export default function Login() {
     }); 
   }
 
+  function handleSignUpButtonClick() { 
+    window.open("https://mobile.twitter.com/i/flow/signup");
+  }
 
   return(<>
     <img src={LogoWhite} className="twitter-logo-main"/> 
@@ -27,9 +30,11 @@ export default function Login() {
             <img src={LogoBlue} className="twitter-logo-small"/>
             <h1 className="twitter-login-header">Happening Now</h1>
             <h4>Join Twitter Today.</h4>
-            <button className="sign-up-button">Sign Up</button>
+            <p className="sign-up-notice">*You will be taken to the actual Twitter website to make your 
+              account. You will then have to navigate back to this site 
+              to sign in with Twitter.*</p>
+            <button className="sign-up-button" onClick={handleSignUpButtonClick}>Sign Up</button>
             <button className="login-button" onClick={handleTwitterLoginClick}>Sign in with Twitter</button>
-
           </div>
       </div>
     </div>

@@ -42,6 +42,11 @@
   font-weight: 800; 
 }
 
+.sign-up-notice { 
+  font-size: 12px; 
+}
+
+
 .login-button { 
   font-family: sans-serif; 
   font-weight: bold;
@@ -52,7 +57,7 @@
   background-color: white; 
   width: 350px; 
   height: 45px; 
-  margin: 5px; 
+  margin: 7px 0; 
 }
 
 .sign-up-button { 
@@ -63,9 +68,9 @@
   border-radius: 20px; 
   padding: 10px; 
   background-color: var(--blue); 
-  width: 250px; 
   width: 350px; 
   height: 45px; 
+  margin: 7px 0 ; 
 }
 
 .login-button:hover { 
