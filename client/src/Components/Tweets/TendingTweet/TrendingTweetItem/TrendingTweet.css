@@ -1,0 +1,20 @@
+.trending-info { 
+  font-size: 13px; 
+  color: var(--light-gray);
+}
+
+.trending-tweet { 
+  width: 350px; 
+  background-color: var(--extra-extra-light-gray); 
+  padding: 10px; 
+  border-top: 1px solid var(--extra-light-gray);
+}
+
+.trending-tweet:hover { 
+  background-color: var(--extra-light-gray);
+}
+
+.trending-tweet-text { 
+  font-weight: 700; 
+  margin: 0; 
+}

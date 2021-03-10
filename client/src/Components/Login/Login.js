@@ -20,15 +20,23 @@ export default function Login() {
   }
 
   return(<>
-    <img src={LogoWhite} className="twitter-logo-main"/> 
+    <img 
+      src={LogoWhite}
+      alt=""
+      className="twitter-logo-main"/> 
     <div className="login-container">
       <div className="twitter-login-image-container">
         <img src={"https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png"} 
-        className="twitter-login-image"/>
+        alt=""
+        className="twitter-login-image"
+        />
       </div>
       <div className="twitter-login-welcome">
           <div className="login">
-            <img src={LogoBlue} className="twitter-logo-small"/>
+            <img 
+              src={LogoBlue} 
+              alt=""
+              className="twitter-logo-small"/>
             <h1 className="twitter-login-header">Happening Now</h1>
             <h4>Join Twitter Today.</h4>
             <p className="sign-up-notice">*You will be taken to the actual Twitter website to make your 

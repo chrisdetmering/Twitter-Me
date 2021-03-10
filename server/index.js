@@ -162,7 +162,9 @@ app.get("/api/trends", (req, res) => {
   twAPI.get(url, query)
   .then(response => { 
     const json = JSON.parse(response);
-    res.json(json); 
+    console.log(json)
+    const trendingTweets = json[0].trends.slice(0, 5); 
+    res.json(trendingTweets); 
   })
 })
 
