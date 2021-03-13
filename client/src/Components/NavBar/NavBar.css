@@ -1,6 +1,6 @@
 .nav-bar-items { 
   display: inline-block; 
-  margin: 20px 0 0; 
+  padding: 30px 70px;
 }
 
 .logo { 
@@ -29,7 +29,7 @@
   align-items: center; 
 }
 
-.link.active { 
+.active { 
   color: var(--blue);
 }
 

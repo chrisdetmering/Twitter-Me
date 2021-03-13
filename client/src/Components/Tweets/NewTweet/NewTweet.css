@@ -1,0 +1,30 @@
+.new-tweet-container { 
+  display: inline-flex; 
+  flex-direction: column; 
+  justify-content: space-between; 
+  width: 600px;
+  border: 1px solid var(--extra-light-gray); 
+
+}
+
+.new-tweet-input { 
+  border: 0; 
+  margin: 20px 20px 0;
+  height: 50px;
+  overflow: hidden;
+  resize: none; 
+}
+
+.new-tweet-input:focus { 
+  outline: none; 
+}
+
+.new-tweet-button-container { 
+  display: flex; 
+  justify-content: flex-end; 
+  padding: 20px 20px 10px;
+}
+
+/* .button-container { 
+  padding: 20px; 
+} */

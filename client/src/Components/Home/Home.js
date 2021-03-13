@@ -1,22 +1,18 @@
 import {useState, useEffect} from "react"; 
+import "./Home.css"; 
 import NavBar from "../NavBar/NavBar"; 
 import TweetSearch from '../TweetSearch/TweetSearch'; 
 import NewTweet from "../Tweets/NewTweet/NewTweet"; 
+import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
+import Spinner from "../Util/UI/Spinners/LoadingSpinner"; 
 
 export default function Home(props) { 
-  const [profileImageUrl, setProfileImageUrl] = useState(''); 
   const [homeTimelineTweets, setHomeTimelineTweets] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true); 
   const {setIsLoggedIn} = props; 
-  
-  // useEffect(() => { 
-  //   fetch(`/api/profile-picture`)
-  //   .then(data => data.json())
-  //   .then(response => {
-  //     setProfileImageUrl(response); 
-  //   })
-  //   .catch(error => console.error(error))
-  // }, [])
 
+
+  
   useEffect(() => { 
     getTimelineTweets(); 
   }, [])
@@ -34,7 +30,9 @@ export default function Home(props) {
       }
 
       if (response) { 
+        // console.log(response); 
         setHomeTimelineTweets(response); 
+        setIsLoading(false); 
       }
     })
     .catch(error => { 
@@ -44,24 +42,25 @@ export default function Home(props) {
   }
 
 
-
   return(<>
-    <NavBar 
-      logout={() => setIsLoggedIn(false)}
-      getTimelineTweets={getTimelineTweets}
-    />
-    {/*TweetCard*/}
-    <h1>Home</h1>
-    {/* <img src={profileImageUrl} alt="profile-pic"/>  */}
-    {/* <NewTweet getTweets={getTimelineTweets}/> */}
-
-    {/*Timeline */}
-    <ul>
-      {homeTimelineTweets.map(tweet => (
-        <li key={tweet.id}>{tweet.text}</li>
-      ))}
-    </ul>
-
-    <TweetSearch />
+    <div className="home-container">
+      <div className="home-side-nav-container">
+        <NavBar 
+          logout={() => setIsLoggedIn(false)}
+          getTimelineTweets={getTimelineTweets}
+        />
+      </div>
+      
+      <div className="home-header-container">
+        <h1 className="home-header">Home</h1>
+        <NewTweet getTweets={getTimelineTweets}/>
+         {isLoading 
+          ? <Spinner /> 
+          : <TweetList tweets={homeTimelineTweets}/>}  
+      </div>  
+      <div className="home-search-container">
+        <TweetSearch setTweets={setHomeTimelineTweets}/>
+      </div>
+    </div>
   </>); 
 }

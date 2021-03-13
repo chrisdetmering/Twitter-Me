@@ -1,3 +1,13 @@
+.search-container { 
+  padding-left: 30px; 
+}
+
+.search-input-container { 
+  height: 76px;
+  display: flex;
+  align-items: center;
+}
+
 .search-input-form { 
   display: flex; 
   width: 350px; 

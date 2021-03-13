@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react'; 
+import "./Profile.css"; 
 import Details from "./Details/Details";
 import NavBar from "../NavBar/NavBar"; 
 import Modal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
-
+import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
 
 
 export default function Profile(props) { 
@@ -41,8 +42,6 @@ export default function Profile(props) {
     
   }
 
-  
-
   function getUserTimeline() { 
     fetch('api/user-timeline')
     .then(data => data.json())
@@ -53,8 +52,6 @@ export default function Profile(props) {
       console.error(error); 
     }); 
   }
-
-
 
   function handleEditProfileClick() { 
     setShowModal(true);
@@ -138,15 +135,21 @@ export default function Profile(props) {
           <input type="submit" value="Save"/>
       </form>
     </Modal>
-    <NavBar logout={() => setIsLoggedIn(false)} getTweets={getUserTimeline}/>
-
-    <Details 
-      details={profileDetails}
-      onEditButtonClick={handleEditProfileClick}
-    />
-    {userTimeline.map(tweet => (
-      <li key={tweet.id}>{tweet.text}</li>
-    ))}
-    <TweetSearch />
+    <div className="profile-container">
+      <div className="side-nav-container">
+        <NavBar logout={() => setIsLoggedIn(false)} getTweets={getUserTimeline}/>
+      </div>
+      <div>
+        <Details 
+          details={profileDetails}
+          onEditButtonClick={handleEditProfileClick}
+        />
+        <TweetList tweets={userTimeline}/>
+      </div>
+      <div className="search-container">
+        <TweetSearch />
+        
+      </div>
+    </div>
   </>); 
 }

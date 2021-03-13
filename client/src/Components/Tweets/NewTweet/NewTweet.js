@@ -1,10 +1,20 @@
 import {useState} from 'react'; 
 import './NewTweet.css'; 
+import Button from "../../Util/UI/Buttons/Button"; 
+
 
 export default function NewTweet(props) { 
   const {getTweets, showModal} = props; 
   const [newTweet, setNewTweet] = useState(''); 
 
+    // useEffect(() => { 
+    //   fetch(`/api/profile-picture`)
+    //   .then(data => data.json())
+    //   .then(response => {
+    //     setProfileImageUrl(response); 
+    //   })
+    //   .catch(error => console.error(error))
+    // }, [])
 
   function handleNewTweet() { 
     fetch(`/api/status/update?status=${newTweet}`)
@@ -19,7 +29,11 @@ export default function NewTweet(props) {
       alert(`There was the following network error ${error}`)
       console.error(error); 
     })
-    .finally(() => showModal(false)); 
+    .finally(() => { 
+      if (showModal) { 
+        showModal(false); 
+      }
+    } ); 
   }
 
 
@@ -32,7 +46,22 @@ export default function NewTweet(props) {
 
 
   return (<>
-    <input placeholder="what's happening?" onChange={handleNewTweetChange} value={newTweet}/>
-    <button onClick={handleNewTweet}>Tweet</button>
+    <div className="new-tweet-container">
+      <textarea 
+        className="new-tweet-input"
+        maxLength="140"
+        placeholder="what's happening?" 
+        onChange={handleNewTweetChange} 
+        value={newTweet}/>
+      <div className="new-tweet-button-container">
+        <div className="button-container"> 
+          <Button 
+            classes="small light"
+            click={handleNewTweet}>Tweet</Button>
+
+        </div>
+       
+      </div>      
+    </div>
   </>); 
 }

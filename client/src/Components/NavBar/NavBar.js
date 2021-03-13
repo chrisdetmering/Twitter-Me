@@ -1,9 +1,9 @@
 import {useState} from "react"; 
 import {Link, NavLink} from "react-router-dom";
+import "./NavBar.css"; 
 import Modal from "../Util/UI/Modals/Modal"; 
 import Button from "../Util/UI/Buttons/Button"; 
 import NewTweet from "../Tweets/NewTweet/NewTweet"; 
-import "./NavBar.css"; 
 import TwitterLogoBlue from "../../images/TwitterLogoBlue.png"; 
 
 

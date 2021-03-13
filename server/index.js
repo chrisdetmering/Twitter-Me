@@ -1,3 +1,4 @@
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const cookieParser = require('cookie-parser');
 const express = require("express"); 
 const path = require("path"); 
@@ -65,7 +66,21 @@ app.get("/api/access-token", (req, res) => {
 })
 
 
+app.get("/api/users/profile-picture", (req, res) => { 
+  const {screen_name} = req.query; 
+  const url = `https://api.twitter.com/1.1/users/show.json?screen_name=${screen_name}`
 
+  const xhr = new XMLHttpRequest()
+  xhr.open("Get", url); 
+  xhr.setRequestHeader("Authorization", `Bearer ${process.env.BEARER_TOKEN}`); 
+  xhr.addEventListener("load", function() { 
+    const json = JSON.parse(this.responseText);
+    const profilePicUrl = json['profile_image_url_https']; 
+    res.json(profilePicUrl); 
+  })
+
+  xhr.send(); 
+})
 
 
 app.get("/api/profile-picture", (req, res) => { 
@@ -162,7 +177,6 @@ app.get("/api/trends", (req, res) => {
   twAPI.get(url, query)
   .then(response => { 
     const json = JSON.parse(response);
-    console.log(json)
     const trendingTweets = json[0].trends.slice(0, 5); 
     res.json(trendingTweets); 
   })

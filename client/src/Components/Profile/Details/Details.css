@@ -1,0 +1,58 @@
+.details-container { 
+  width: 600px; 
+  position: relative;
+  border: 1px solid var(--extra-light-gray); 
+}
+
+.banner { 
+  width: 100%; 
+}
+
+.profile-picture{ 
+  position: absolute;
+  height: 145px; 
+  width: 145px;  
+  border: 5px solid white; 
+  border-radius: 145px;
+  left: 10px; 
+  top: 125px; 
+}
+
+.edit-button-container { 
+  padding-right: 20px; 
+  width: 100%;
+  display: flex; 
+  justify-content: flex-end; 
+}
+
+.profile-info-container { 
+  padding: 20px; 
+}
+
+.screen-name { 
+  font-size: 15px; 
+  color: var(--dark-gray); 
+}
+
+.description { 
+  font-size: 15px; 
+}
+.icon { 
+  margin-left: 0px; 
+}
+
+.count-container { 
+  width: 250px; 
+  display: flex; 
+  justify-content: space-between; 
+}
+
+.count { 
+  font-weight: 600; 
+  padding-right: 10px; 
+}
+
+.text { 
+  margin: 0; 
+  color: var(--dark-gray); 
+}
