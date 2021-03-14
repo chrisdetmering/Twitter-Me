@@ -1,6 +1,7 @@
 .trending-tweets-list { 
   display: inline-block; 
   padding: 0; 
+  width: 350px; 
 }
 
 .trending-top { 
@@ -14,6 +15,10 @@
   margin: 0; 
 }
 
-/* .trending-bottom { 
-
-} */
+.trending-bottom { 
+  padding: 20px; 
+  border-top: 1px solid var(--extra-light-gray);
+  border-bottom-left-radius: 20px; 
+  border-bottom-right-radius: 20px; 
+  background-color: var(--extra-extra-light-gray); 
+}

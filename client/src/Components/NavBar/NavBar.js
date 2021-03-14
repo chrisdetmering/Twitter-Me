@@ -25,7 +25,9 @@ export default function NavBar(props) {
   }
 
   return(<>
-    <Modal show={showModal} close={handleCloseModalClick}>
+    <Modal 
+      classes="medium"
+      show={showModal} close={handleCloseModalClick}>
       <NewTweet getTweets={getTweets} showModal={setShowModal}/>
     </Modal>
     <ul className="nav-bar-items">

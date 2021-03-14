@@ -6,16 +6,16 @@ export default function Tweet({ tweet }) {
   const {user} = tweet; 
   const {created_at, text, retweet_count, favorite_count} = tweet; 
 
-  // useEffect(() => { 
-  //   fetch(`/api/users/profile-picture?screen_name=${user.screen_name}`)
-  //   .then(data => data.json())
-  //   .then(response => { 
+  useEffect(() => { 
+    fetch(`/api/users/profile-picture?screen_name=${user.screen_name}`)
+    .then(data => data.json())
+    .then(response => { 
 
-  //     setProfilePicUrl(response);
-  //   })
-  //   .catch(error => console.error(error))
+      setProfilePicUrl(response);
+    })
+    .catch(error => console.error(error))
 
-  // }, []); 
+  }, []); 
 
 
   function getHoursSinceTweeted() { 

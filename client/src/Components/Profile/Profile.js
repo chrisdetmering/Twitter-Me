@@ -5,7 +5,7 @@ import NavBar from "../NavBar/NavBar";
 import Modal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
 import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
-
+import Button from "../Util/UI/Buttons/Button";
 
 export default function Profile(props) { 
   const { setIsLoggedIn } = props; 
@@ -88,13 +88,13 @@ export default function Profile(props) {
     .finally(() => setShowModal(false));
   }
 
-  function updateProfileImage() { 
-    fetch(`/api/profile-image-update?image=${image}`, { 
-      method: "POST"
-    })
-    .then(data => data.json())
-    .then(response => console.log(response))
-  }
+  // function updateProfileImage() { 
+  //   fetch(`/api/profile-image-update?image=${image}`, { 
+  //     method: "POST"
+  //   })
+  //   .then(data => data.json())
+  //   .then(response => console.log(response))
+  // }
 
 
   function handleDescriptionChange(event) { 
@@ -107,46 +107,51 @@ export default function Profile(props) {
     setName(newName); 
   }
 
-  function onProfileImageChange(event) { 
-    const imageJPG = event.target.files[0].name; 
-    setImage(imageJPG); 
-  }
+  // function onProfileImageChange(event) { 
+  //   const imageJPG = event.target.files[0].name; 
+  //   setImage(imageJPG); 
+  // }
 
-  useEffect(() => { 
-    console.log(image); 
-  }, [image])
+  // useEffect(() => { 
+  //   console.log(image); 
+  // }, [image])
 
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>
       <h1>Edit Profile</h1> 
-      <form onSubmit={handleEditProfileSubmit}>
-          <input type="file" onChange={onProfileImageChange} />
           <br />
-          <img src={profileImageUrl} alt=''/>
-          <br />
-          <input onChange={handleNameChange} value={name}/>
+          <textarea 
+            className="edit-name-textarea"
+            maxLength="50"
+            onChange={handleNameChange} 
+            value={name}>
+          </textarea>
           <br />
           <textarea
+            className="edit-description-textarea"
             rows="4"
             cols="50"
+            maxLength="160"
             onChange={handleDescriptionChange} value={description}>
           </textarea>
           <br />
-          <input type="submit" value="Save"/>
-      </form>
+          <Button 
+            classes="small dark"
+            click={handleEditProfileSubmit}>Save</Button>
+    
     </Modal>
     <div className="profile-container">
-      <div className="side-nav-container">
+      <div className="profile-side-nav-container">
         <NavBar logout={() => setIsLoggedIn(false)} getTweets={getUserTimeline}/>
       </div>
-      <div>
+      <div className="profile-details-container">
         <Details 
           details={profileDetails}
           onEditButtonClick={handleEditProfileClick}
         />
         <TweetList tweets={userTimeline}/>
       </div>
-      <div className="search-container">
+      <div className="profile-search-container">
         <TweetSearch />
         
       </div>

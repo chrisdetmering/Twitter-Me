@@ -1,22 +1,20 @@
 import {useEffect, useState} from 'react'; 
-import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
-import TrendingTweetsList from "../Tweets/TendingTweet/TrendingTweetsList/TrendingTweetsList"; 
 import "./TweetSearch.css"; 
+import TrendingTweetsList from "../Tweets/TendingTweet/TrendingTweetsList/TrendingTweetsList";  
 
 export default function TweetSearch(props) { 
   const [localTrendingTweets, setLocalTrendingTweets] = useState([]); 
-  const [searchedTweets, setSearchedTweets] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(''); 
-  const [isSearched, setIsSearched] = useState(false); 
-
+  const [isLoading, setIsLoading] = useState(true); 
+  const {setTweets, setLoading} = props; 
 
   useEffect(() => { 
     fetch(`/api/trends`)
     .then(data => data.json())
     .then(response => { 
-      if (response.length > 0) { 
-        // console.log(response); 
+      if (response.length > 0) {
         setLocalTrendingTweets(response); 
+        setIsLoading(false); 
       }
     })
     .catch(error => console.error(error))
@@ -30,12 +28,13 @@ export default function TweetSearch(props) {
   }
 
   function handleSearchButtonClick(e) { 
+    setLoading(true);
     e.preventDefault(); 
     fetch(`/api/search?q=${searchTerm}`)
     .then(data => data.json())
     .then(response => { 
-      setIsSearched(true); 
-      setSearchedTweets(response.statuses);
+      setTweets(response.statuses);
+      setLoading(false);
       setSearchTerm('');
      })
     .catch(error => console.log(error))
@@ -43,11 +42,12 @@ export default function TweetSearch(props) {
 
 
   function handleTrendingTweetClick(searchTerm) { 
+    setLoading(true);
     fetch(`/api/search?q=${searchTerm}`)
     .then(data => data.json())
     .then(response => { 
-      setIsSearched(true); 
-      setSearchedTweets(response.statuses);
+      setTweets(response.statuses);
+      setLoading(false);
       setSearchTerm('');
      })
     .catch(error => console.log(error))
@@ -70,10 +70,13 @@ export default function TweetSearch(props) {
             onChange={handleSearchChange} 
             value={searchTerm}/>
         </form>
-      </div>
+      </div> 
+      
       <TrendingTweetsList 
-          tweets={localTrendingTweets}
-          search={handleTrendingTweetClick}/>
+        loading={isLoading}
+        tweets={localTrendingTweets}
+        search={handleTrendingTweetClick}/>
+      
     </div>
   </>)
 }

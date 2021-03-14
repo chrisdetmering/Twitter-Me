@@ -19,6 +19,7 @@ export default function Home(props) {
 
 
   function getTimelineTweets() { 
+    setIsLoading(true); 
     fetch(`/api/home-timeline`)
     .then(data => data.json())
     .then(response => { 
@@ -32,14 +33,17 @@ export default function Home(props) {
       if (response) { 
         // console.log(response); 
         setHomeTimelineTweets(response); 
-        setIsLoading(false); 
       }
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
       console.error(error); 
     })
+    .finally(() => { 
+      setIsLoading(false); 
+    })
   }
+
 
 
   return(<>
@@ -53,13 +57,17 @@ export default function Home(props) {
       
       <div className="home-header-container">
         <h1 className="home-header">Home</h1>
-        <NewTweet getTweets={getTimelineTweets}/>
+        <NewTweet 
+          getTweets={getTimelineTweets}/>
          {isLoading 
           ? <Spinner /> 
-          : <TweetList tweets={homeTimelineTweets}/>}  
+          : <TweetList 
+            tweets={homeTimelineTweets}/>}  
       </div>  
       <div className="home-search-container">
-        <TweetSearch setTweets={setHomeTimelineTweets}/>
+        <TweetSearch 
+          setTweets={setHomeTimelineTweets}
+          setLoading={setIsLoading}/>
       </div>
     </div>
   </>); 
