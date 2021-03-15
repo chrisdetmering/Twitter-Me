@@ -1,0 +1,48 @@
+.button { 
+  font-family: sans-serif; 
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px;   
+  margin: 7px 0; 
+}
+
+.button:focus { 
+  outline: none; 
+}
+
+.small { 
+  width: 90px;
+  height: 35px; 
+  padding: 8px;  
+}
+
+.medium { 
+  width: 200px;
+  height: 40px; 
+  
+}
+
+.large { 
+  width: 350px; 
+  height: 45px; 
+}
+
+.dark { 
+  color: white; 
+  border: 1px solid var(--blue); 
+  background-color: var(--blue); 
+}
+
+.light { 
+  color: var(--blue); 
+  border: 1px solid var(--blue); 
+  background-color: white; 
+}
+
+.dark:hover { 
+  background-color: var(--dark-blue); 
+}
+
+.light:hover { 
+  background-color: var(--light-blue); 
+}

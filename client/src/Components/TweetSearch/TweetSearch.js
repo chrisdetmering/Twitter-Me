@@ -1,18 +1,20 @@
 import {useEffect, useState} from 'react'; 
+import "./TweetSearch.css"; 
+import TrendingTweetsList from "../Tweets/TendingTweet/TrendingTweetsList/TrendingTweetsList";  
 
 export default function TweetSearch(props) { 
   const [localTrendingTweets, setLocalTrendingTweets] = useState([]); 
-  const [searchedTweets, setSearchedTweets] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(''); 
-  const [isSearched, setIsSearched] = useState(false); 
-
+  const [isLoading, setIsLoading] = useState(true); 
+  const {setTweets, setLoading} = props; 
 
   useEffect(() => { 
     fetch(`/api/trends`)
     .then(data => data.json())
     .then(response => { 
-      if (response.length > 0) { 
-        setLocalTrendingTweets(response[0].trends); 
+      if (response.length > 0) {
+        setLocalTrendingTweets(response); 
+        setIsLoading(false); 
       }
     })
     .catch(error => console.error(error))
@@ -25,43 +27,56 @@ export default function TweetSearch(props) {
     setSearchTerm(searchTerm); 
   }
 
-  function handleSearchButtonClick() { 
+  function handleSearchButtonClick(e) { 
+    setLoading(true);
+    e.preventDefault(); 
     fetch(`/api/search?q=${searchTerm}`)
     .then(data => data.json())
     .then(response => { 
-      setIsSearched(true); 
-      setSearchedTweets(response.statuses);
+      setTweets(response.statuses);
+      setLoading(false);
       setSearchTerm('');
      })
     .catch(error => console.log(error))
   }
 
 
-
-//TODO: need to think of a better way of doing this
-  function displayTweets() { 
-    if (isSearched) { 
-      return searchedTweets.map(tweet => (
-        <li key={tweet.id}>{tweet.text}</li>
-      ))
-    }
-
-    return localTrendingTweets.map((trend, idx) => (
-      <li key={idx}>{trend.name}</li>
-    ))
+  function handleTrendingTweetClick(searchTerm) { 
+    setLoading(true);
+    fetch(`/api/search?q=${searchTerm}`)
+    .then(data => data.json())
+    .then(response => { 
+      setTweets(response.statuses);
+      setLoading(false);
+      setSearchTerm('');
+     })
+    .catch(error => console.log(error))
   }
 
 
   return (<>
-    <br/>
-    <input 
-      type="text" 
-      placeholder="search twitter..."
-      onChange={handleSearchChange} 
-      value={searchTerm}/>
-    <button onClick={handleSearchButtonClick}>Search</button>
-    <ul>
-      {displayTweets()}
-    </ul>
+    <div className="search-container">
+      <div className="search-input-container">
+        <form 
+          className="search-input-form"
+          onSubmit={handleSearchButtonClick}>
+          <span className="material-icons search-icon">
+            search
+          </span>
+          <input 
+            type="text" 
+            className="search-input"
+            placeholder="Search Twitter"
+            onChange={handleSearchChange} 
+            value={searchTerm}/>
+        </form>
+      </div> 
+      
+      <TrendingTweetsList 
+        loading={isLoading}
+        tweets={localTrendingTweets}
+        search={handleTrendingTweetClick}/>
+      
+    </div>
   </>)
 }

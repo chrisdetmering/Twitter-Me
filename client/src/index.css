@@ -17,8 +17,10 @@
   box-sizing: border-box; 
 }
 
-body { 
+body, a, ul { 
   font-family: 'Open Sans', sans-serif;
   margin: 0; 
+  text-decoration: none; 
+  list-style-type: none;
 }
 

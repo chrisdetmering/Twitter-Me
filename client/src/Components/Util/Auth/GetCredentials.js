@@ -3,6 +3,7 @@ import { useHistory }  from "react-router-dom";
 import { 
   useLocation
 } from "react-router-dom"; 
+import Spinner from "../UI/Spinners/LoadingSpinner"; 
 
 export default function GetCredentials(props) { 
   const {login} = props; 
@@ -44,7 +45,14 @@ export default function GetCredentials(props) {
   }, [oauthToken, oauthVerifier])
   
 
-  return (<h1>Loading your profile...</h1>);
-
-
+  return (
+    <div style={{
+        height: "100vh",
+        border: "1px solid black",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"}}>
+      <Spinner klass="large-spinner"/>
+    </div>
+  );
 }

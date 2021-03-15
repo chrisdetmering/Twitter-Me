@@ -1,23 +1,39 @@
+import "./Details.css"; 
+import Button from "../../Util/UI/Buttons/Button"; 
 
 export default function Details({details, onEditButtonClick}) { 
+
+  function getDate(date) { 
+    return new Date(date).toLocaleDateString(); 
+  }
 
   if (!details) { 
     return <p>Loading...</p>
   }
 
+
   return (<>
-    <h1>Profile</h1>
-    <img src={details.profile_banner_url} alt="profile-banner"/>
-    <img src={details.profile_image_url} alt="profile-pic"/> 
-    <button onClick={onEditButtonClick}>Edit profile</button>
-    <p><strong>{details.name}</strong></p>
-    <p>{details.screen_name}</p>
-    <p>{details.description}</p>
-    <p>{details.created_at}</p>
-    <p>Following {details.friends_count}</p>
-    <p>Followers {details.followers_count}</p>
-    <ul>
-      {/*tweets*/}
-    </ul>
+    <div className="details-container">
+      <img className="banner" src={details.profile_banner_url} alt="profile-banner"/>
+      <img className="profile-picture"src={details.profile_image_url} alt="profile-pic"/>
+      <div className="edit-button-container">
+        <Button
+          classes="small light"
+          click={onEditButtonClick}>Edit profile</Button>
+      </div>
+      <div className="profile-info-container">
+        <h3>{details.name}</h3>
+        <p className="screen-name">@{details.screen_name}</p>
+        <p className="description">{details.description}</p>
+        <p><span className="material-icons icon">
+          date_range
+          </span> Joined {getDate(details.created_at)}
+        </p>
+        <div className="count-container">
+          <p><span className="count">{details.friends_count}</span><span className="text">Following</span></p>
+          <p><span className="count">{details.followers_count}</span><span className="text">Followers</span></p>
+        </div>
+      </div>
+    </div>
   </>);
 }
