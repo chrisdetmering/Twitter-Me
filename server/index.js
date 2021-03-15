@@ -11,18 +11,6 @@ const users = require('./TwitterAPI/users');
 app.use(express.static(path.join(__dirname, '../client', 'build')));
 app.use(cookieParser()); 
 
-
-//TODO: 
-
-
-//steps for implementing Twitter API 
-//Handle errors (catch)
-// - take care of twitter sending technical error (HTML)
-//Redesign sign in flow to not have GetCredentials Component?
-//take care of callbacks 
-//maybe have just one catch all endpoint and pass in what varies? 
-
-
 app.get('/api/sign-in-with-twitter', (req, res) => { 
   const url = "https://api.twitter.com/oauth/request_token"; 
   const twAPI = new TwitterApi(); 
@@ -32,9 +20,8 @@ app.get('/api/sign-in-with-twitter', (req, res) => {
   .then(response => { 
     const oauthParams = parseOAuthParams(response); 
     const oauthTokenValue = oauthParams["oauth_token"]; 
-    
-    const url = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`;  
-    res.send(url); 
+
+    res.send(`https://api.twitter.com/oauth/authenticate?oauth_token=${oauthTokenValue}`); 
   })
 })
 
@@ -64,6 +51,11 @@ app.get("/api/access-token", (req, res) => {
     res.json(oauthParams); 
   })
 })
+
+
+// app.get("get")
+
+
 
 
 app.get("/api/users/profile-picture", (req, res) => { 
@@ -159,9 +151,6 @@ app.get("/api/user-timeline", (req, res) => {
   })
 })
 
-
-
-//get trends in the United States. Need to make this more dynamic
 app.get("/api/trends", (req, res) => { 
   const url = "https://api.twitter.com/1.1/trends/place.json"; 
   const query = {"id": "23424977"}; 
@@ -200,7 +189,6 @@ app.get("/api/search", (req, res) => {
   })
 })
 
-//TODO: update this to be status-update
 app.get("/api/status/update", (req, res) => { 
   const url = "https://api.twitter.com/1.1/statuses/update.json";
   const query = {"status":req.query.status}
@@ -219,8 +207,6 @@ app.get("/api/status/update", (req, res) => {
   })
 })
 
-
-//update name & description 
 app.post('/api/profile-update', (req, res) => { 
   const url = "https://api.twitter.com/1.1/account/update_profile.json";
   const {name, description} = req.query;
@@ -238,33 +224,9 @@ app.post('/api/profile-update', (req, res) => {
     res.json(json); 
   })
 })
-//update profile banner 
-
-//update profile image 
-//TODO: if enough time
-// app.post('/api/profile-image-update', (req, res) => { 
-//   const url = "https://api.twitter.com/1.1/account/update_profile_image.json";
-//   const {image} = req.query;
-//   console.log(image)
-//   const cookies = req.cookies;
-//   const userId = cookies.user_id;
-//   const [oauth_token, oauth_token_secret] = users[userId]; 
-
-//   const twAPI = new TwitterApi(); 
-//   twAPI.setAuthToken(oauth_token); 
-//   twAPI.setAuthTokenSecret(oauth_token_secret); 
-
-//   twAPI.post(url, {image})
-//   .then(response => { 
-//     console.log('response', response); 
-//     // res.json(json); 
-//   })
-// })
-
 
 app.get('*', (req, res) => { 
   res.sendFile(path.join(__dirname, '../client', 'build', 'index.html')); 
 })
-
 
 app.listen(PORT, () => console.log(`Server Listening on ${PORT} `)); 
