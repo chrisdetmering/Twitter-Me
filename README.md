@@ -1,7 +1,7 @@
 #Finish Project plan 
 #Add spinner to GetCredentials Page (GetCredentials.js) (done)
 #Write logic for initial state (App.js)
-#Fix padding for Home & Profile Button icons (NavBar.js)
+#Fix padding for Home & Profile Button icons (NavBar.js) (done)
 #Get higher resolution image for profile_picture (Details.js) 
 #Add media queries for responsive web design
 

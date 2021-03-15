@@ -33,16 +33,16 @@
   color: var(--blue);
 }
 
-.icon { 
+.nav-icon { 
   color: black; 
   margin-left: 10px;
 }
 
-.link.active > span.icon { 
+.link.active > span.nav-icon{ 
   color: var(--blue);
 }
 
-.text { 
+.nav-text { 
   margin: 0 0 0 20px; 
 }
 

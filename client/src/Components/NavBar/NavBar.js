@@ -43,8 +43,8 @@ export default function NavBar(props) {
           to="/home" 
           activeClassName="active"
           className="link">
-          <span className="material-icons icon">home</span>
-          <p className="text">Home</p>
+          <span className="material-icons nav-icon">home</span>
+          <p className="nav-text">Home</p>
         </NavLink>
       </li>
       <li className="nav-bar-item">
@@ -52,8 +52,8 @@ export default function NavBar(props) {
           to="/profile" 
           activeClassName="active"
           className="link">
-          <span className="material-icons icon">perm_identity</span>
-          <p className="text">Profile</p>
+          <span className="material-icons nav-icon">perm_identity</span>
+          <p className="nav-text">Profile</p>
         </NavLink>
       </li>
       <li>
