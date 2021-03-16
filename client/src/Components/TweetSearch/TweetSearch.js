@@ -34,6 +34,7 @@ export default function TweetSearch(props) {
   }
 
   function handleSearchButtonClick(e) { 
+    e.preventDefault(); 
     setLoading(true);
     e.preventDefault(); 
     fetch(`/api/search?q=${searchTerm}`)
