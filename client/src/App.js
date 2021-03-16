@@ -12,7 +12,7 @@ import GetCredentials from "./Components/Util/Auth/GetCredentials";
 import './App.css';
 
 function App() {
-  //TODO: write logic for innital state
+  //TODO: write logic for initial state
   const initialState = () => Boolean(localStorage.getItem("screen_name"));
   const [isLoggedIn, setIsLoggedIn] = useState(true); 
 

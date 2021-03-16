@@ -11,11 +11,21 @@ export default function Details({details, onEditButtonClick}) {
     return <p>Loading...</p>
   }
 
+  function getOriginalProfileImage() { 
+    const parts = details.profile_image_url.split('_'); 
+    const last = parts.pop(); 
+    const newParts = parts.join('_');  
+    const imageType = last.split('.').pop(); 
+    return newParts + '.' + imageType; 
+  }
+
+  const profileImage = getOriginalProfileImage();
+
 
   return (<>
     <div className="details-container">
       <img className="banner" src={details.profile_banner_url} alt="profile-banner"/>
-      <img className="profile-picture"src={details.profile_image_url} alt="profile-pic"/>
+      <img className="profile-picture" src={profileImage} alt="profile-pic"/>
       <div className="edit-button-container">
         <Button
           classes="small light"
