@@ -14,7 +14,7 @@ Use it [here](https://twitter-me-now.herokuapp.com/home)
 
 ## Summary
 
-The first CapStone Project of the SDMM program. I wanted to try to implement the Sign In with Twitter OAuth1.1a flow. I made my own custom Twitter API class that handle the OAuth1.1a specs. 
+The first Capstone Project of the SDMM program. I wanted to try to implement the Sign In with Twitter OAuth1.1a flow. I made my own custom Twitter API class that handled the OAuth1.1a specs. 
 
 I also used React Hooks to build the client side. learning how to break up my code, keep it moduler, and use functional programming was enjoyable. 
 
