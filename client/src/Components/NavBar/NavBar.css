@@ -47,4 +47,24 @@
 }
 
 
+@media only screen and (max-width: 1150px){ 
+  .nav-bar-items { 
+    display: flex; 
+    flex-direction: column;
+    padding: 30px 70px;
+  }
+  .nav-bar-item { 
+    width: 50px; 
+    display: inline-block;
+  }
+  .nav-text { 
+    display: none;
+  }
+  
+}
 
+@media only screen and (max-width: 850px){ 
+  .nav-bar-items { 
+    padding: 0
+  }
+}

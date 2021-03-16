@@ -13,8 +13,6 @@ export default function Profile(props) {
   const [showModal, setShowModal] = useState(false);  
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [profileImageUrl, setProfileImageUrl] = useState(''); 
-  const [image, setImage] = useState(null); 
   const [userTimeline, setUserTimeline] = useState([]); 
 
   useEffect(() => { 
@@ -31,9 +29,7 @@ export default function Profile(props) {
     .then(response => { 
       setName(response.name);
       setDescription(response.description);
-      setProfileImageUrl(response.profile_image_url);
       setProfileDetails(response);
-      
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
@@ -88,15 +84,6 @@ export default function Profile(props) {
     .finally(() => setShowModal(false));
   }
 
-  // function updateProfileImage() { 
-  //   fetch(`/api/profile-image-update?image=${image}`, { 
-  //     method: "POST"
-  //   })
-  //   .then(data => data.json())
-  //   .then(response => console.log(response))
-  // }
-
-
   function handleDescriptionChange(event) { 
     const newDescription = event.target.value; 
     setDescription(newDescription);
@@ -106,15 +93,6 @@ export default function Profile(props) {
     const newName = event.target.value; 
     setName(newName); 
   }
-
-  // function onProfileImageChange(event) { 
-  //   const imageJPG = event.target.files[0].name; 
-  //   setImage(imageJPG); 
-  // }
-
-  // useEffect(() => { 
-  //   console.log(image); 
-  // }, [image])
 
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>

@@ -56,3 +56,10 @@
   margin: 0; 
   color: var(--dark-gray); 
 }
+
+.details-spinner-container { 
+  display: flex;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+}

@@ -91,11 +91,6 @@
   }
 
   .twitter-logo-main { 
-    height: 200px;
-    width: 200px; 
-    top: 70%;  
-    left: 40%; 
-    z-index: 1;
-    position: absolute;
+    display: none; 
   } 
 }

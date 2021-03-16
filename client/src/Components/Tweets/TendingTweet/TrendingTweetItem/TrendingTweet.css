@@ -4,7 +4,7 @@
 }
 
 .trending-tweet { 
-  width: 350px; 
+  width: 100%;
   background-color: var(--extra-extra-light-gray); 
   padding: 10px; 
   border-top: 1px solid var(--extra-light-gray);

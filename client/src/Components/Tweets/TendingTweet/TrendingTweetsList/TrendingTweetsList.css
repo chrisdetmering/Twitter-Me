@@ -1,7 +1,7 @@
 .trending-tweets-list { 
   display: inline-block; 
   padding: 0; 
-  width: 350px; 
+  width: 100%;
 }
 
 .trending-top { 

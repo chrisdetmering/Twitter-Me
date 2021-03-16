@@ -29,3 +29,8 @@
   flex-basis: 0
 }
 
+@media only screen and (max-width: 1300px){ 
+  /* .home-search-container { 
+    display: none;  
+  } */
+}

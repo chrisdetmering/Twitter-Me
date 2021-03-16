@@ -46,3 +46,15 @@
 .light:hover { 
   background-color: var(--light-blue); 
 }
+
+@media only screen and (max-width: 1150px){ 
+  .button.medium { 
+    width: 100px; 
+  }
+}
+
+@media only screen and (max-width: 850px){ 
+  .button.medium { 
+    display: none; 
+  }
+}

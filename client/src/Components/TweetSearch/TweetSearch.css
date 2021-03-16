@@ -1,5 +1,6 @@
 .search-container { 
   padding-left: 30px; 
+  width: 350px;
 }
 
 .search-input-container { 
@@ -22,7 +23,7 @@
   background-color: var(--extra-light-gray); 
   height: 20px; 
   font-size: 15px; 
-  margin-left: 15px; 
+  width: 80%; 
 }
 
 .search-input:focus { 
@@ -46,3 +47,26 @@
   color: var(--blue); 
 }
 
+@media only screen and (max-width: 1300px){ 
+  .search-container { 
+    width: 250px; 
+    /* display: none; */
+  }
+  
+}
+
+@media only screen and (max-width: 1200px){ 
+  .search-container { 
+    width: 200px; 
+    /* display: none; */
+  }
+  .search-input { 
+    width: 70%; 
+  }
+}
+
+@media only screen and (max-width: 1050px){ 
+  .search-container { 
+    display: none;
+  }
+}

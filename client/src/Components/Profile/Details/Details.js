@@ -1,5 +1,6 @@
 import "./Details.css"; 
 import Button from "../../Util/UI/Buttons/Button"; 
+import Spinner from "../../Util/UI/Spinners/LoadingSpinner";
 
 export default function Details({details, onEditButtonClick}) { 
 
@@ -7,9 +8,8 @@ export default function Details({details, onEditButtonClick}) {
     return new Date(date).toLocaleDateString(); 
   }
 
-  if (!details) { 
-    return <p>Loading...</p>
-  }
+    
+  
 
   function getOriginalProfileImage() { 
     const parts = details.profile_image_url.split('_'); 
@@ -19,8 +19,18 @@ export default function Details({details, onEditButtonClick}) {
     return newParts + '.' + imageType; 
   }
 
-  const profileImage = getOriginalProfileImage();
+  
 
+  if (!details) { 
+    return (
+      <div className="details-spinner-container">
+        <Spinner />
+      </div>
+     );
+  }
+ 
+
+  const profileImage = getOriginalProfileImage();
 
   return (<>
     <div className="details-container">
