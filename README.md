@@ -1,22 +1,23 @@
-#Finish Project plan 
-#Add spinner to GetCredentials Page (GetCredentials.js) (done)
-#Fix padding for Home & Profile Button icons (NavBar.js) (done)
-#Get higher resolution image for profile_picture (Details.js)  (done)
-#Add media queries for responsive web design (done)
-#add spinner to profile component (done)
-#Show error component when there is an error (done)
+# React Twitter App 
 
-#Make plan of attack:
-#GOAL FOR TODAY 
-#FINISH PROJECT BY NOON  
+<br>
 
+_A Twitter Clone written using Express, React Hooks and CSS_
 
-#Check if you can got on as Chris and Leslie at the same time. 
-#Send project link to Alex and Mikey and have them find any errors. 
-#Send project to Andy and Ahmed and see if they can find any errors 
-#Post to students and see if they can find any errors 
-#Finish GitHub repo
+<br>
 
+Use it [here](https://twitter-me-now.herokuapp.com/home)
 
-#Later 
-#Write logic for initial state (App.js)
+<br>
+
+<image src="images/game_play_crop.png">
+
+## Summary
+
+Back in 2014 I was determined to become a programmer. After reading the Head First Javascript book, I wasn't sure what project to work on. I eventually landed on Tetris.
+
+It took me more than a month to work through building out all the functionality that was needed. I learned A TON about problem solving and some of the different concepts I had learned in Javascript (such as working with classes). It was challenging at times but worth every minute. :-)
+
+## Author
+
+* **Andy Sterkowitz** - *Full-Stack Software Developer* - [Website](https://andysterkowitz.com) | [LinkedIn](https://www.linkedin.com/in/andrewsterkowitz/)
