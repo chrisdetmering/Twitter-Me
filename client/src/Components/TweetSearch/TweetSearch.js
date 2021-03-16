@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react'; 
 import "./TweetSearch.css"; 
 import TrendingTweetsList from "../Tweets/TendingTweet/TrendingTweetsList/TrendingTweetsList";  
+import ErrorMessage from "../Util/UI/Errors/ErrorMessage"; 
 
 export default function TweetSearch(props) { 
   const [localTrendingTweets, setLocalTrendingTweets] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(''); 
   const [isLoading, setIsLoading] = useState(true); 
+  const [isError, setIsError] = useState(false); 
   const {setTweets, setLoading} = props; 
 
   useEffect(() => { 
@@ -15,9 +17,13 @@ export default function TweetSearch(props) {
       if (response.length > 0) {
         setLocalTrendingTweets(response); 
         setIsLoading(false); 
+      } else { 
+        setIsError(true); 
       }
     })
-    .catch(error => console.error(error))
+    .catch(error => {
+      setIsError(true); 
+    })
   }, [])
 
 
@@ -37,7 +43,9 @@ export default function TweetSearch(props) {
       setLoading(false);
       setSearchTerm('');
      })
-    .catch(error => console.log(error))
+     .catch(error => {
+      setIsError(true); 
+    })
   }
 
 
@@ -50,9 +58,17 @@ export default function TweetSearch(props) {
       setLoading(false);
       setSearchTerm('');
      })
-    .catch(error => console.log(error))
+     .catch(error => {
+      setIsError(true); 
+    })
   }
 
+  if (isError) { 
+    return ( 
+      <ErrorMessage 
+        messageOne="Something went wrong :("/>
+    );
+  }
 
   return (<>
     <div className="search-container">
@@ -67,6 +83,7 @@ export default function TweetSearch(props) {
             type="text" 
             className="search-input"
             placeholder="Search Twitter"
+            maxLength="15"
             onChange={handleSearchChange} 
             value={searchTerm}/>
         </form>

@@ -2,8 +2,11 @@ import "./TrendingTweetsList.css";
 import { v4 as uuidv4 } from 'uuid';
 import TrendingTweet from "../TrendingTweetItem/TrendingTweet"; 
 import Spinner from "../../../Util/UI/Spinners/LoadingSpinner"; 
+import ErrorMessage from "../../../Util/UI/Errors/ErrorMessage"; 
 
 export default function TrendingTweetsList(props) { 
+  
+
   const {tweets, search, loading} = props; 
 
   const trends = tweets.map(tweet => (
@@ -12,6 +15,9 @@ export default function TrendingTweetsList(props) {
       tweet={tweet}
       search={search}/>
   )); 
+
+
+
 
   return (
     <ul className="trending-tweets-list">

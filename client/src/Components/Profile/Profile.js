@@ -6,6 +6,8 @@ import Modal from "../Util/UI/Modals/Modal";
 import TweetSearch from "../TweetSearch/TweetSearch"; 
 import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
 import Button from "../Util/UI/Buttons/Button";
+import ErrorMessage from '../Util/UI/Errors/ErrorMessage';
+
 
 export default function Profile(props) { 
   const { setIsLoggedIn } = props; 
@@ -14,6 +16,7 @@ export default function Profile(props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [userTimeline, setUserTimeline] = useState([]); 
+  const [isError, setIsError] = useState(false); 
 
   useEffect(() => { 
     getProfileDetails(); 
@@ -33,6 +36,7 @@ export default function Profile(props) {
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
+      setIsError(true)
       console.error(error); 
     })
     
@@ -45,7 +49,9 @@ export default function Profile(props) {
       setUserTimeline(response); 
     })
     .catch(error => { 
-      console.error(error); 
+      alert(`There was the following network error ${error}`)
+      setIsError(true)
+      console.error(error);
     }); 
   }
 
@@ -79,7 +85,8 @@ export default function Profile(props) {
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
-      console.error(error); 
+      setIsError(true)
+      console.error(error);
     })
     .finally(() => setShowModal(false));
   }
@@ -93,6 +100,15 @@ export default function Profile(props) {
     const newName = event.target.value; 
     setName(newName); 
   }
+
+  if (isError) { 
+    return ( 
+      <ErrorMessage 
+        messageOne="Something went wrong :("/>
+    );
+  }
+
+
 
   return(<>
     <Modal show={showModal} close={handleCloseModalClick}>

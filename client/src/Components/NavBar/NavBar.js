@@ -35,6 +35,7 @@ export default function NavBar(props) {
         <Link to="/home">
         <img 
           src={TwitterLogoBlue}
+          alt="logo"
           className="logo"/>
         </Link>
       </li>

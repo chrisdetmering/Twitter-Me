@@ -5,10 +5,12 @@ import TweetSearch from '../TweetSearch/TweetSearch';
 import NewTweet from "../Tweets/NewTweet/NewTweet"; 
 import TweetList from "../Tweets/Tweets/TweetList/TweetList"; 
 import Spinner from "../Util/UI/Spinners/LoadingSpinner"; 
+import ErrorMessage from "../Util/UI/Errors/ErrorMessage"; 
 
 export default function Home(props) { 
   const [homeTimelineTweets, setHomeTimelineTweets] = useState([]); 
   const [isLoading, setIsLoading] = useState(true); 
+  const [isError, setIsError] = useState(false); 
   const {setIsLoggedIn} = props; 
 
 
@@ -25,18 +27,17 @@ export default function Home(props) {
     .then(response => { 
       
       if (response.errors) { 
-        alert(response.errors[0].message);
+        alert(`There was the following error ${response.errors[0].message}`)
         console.error(response.errors[0].message); 
-        return; 
-      }
-
-      if (response) { 
-        // console.log(response); 
+        setIsError(true);
+      } else { 
         setHomeTimelineTweets(response); 
       }
+
     })
     .catch(error => { 
       alert(`There was the following network error ${error}`)
+      setIsError(true);
       console.error(error); 
     })
     .finally(() => { 
@@ -44,7 +45,12 @@ export default function Home(props) {
     })
   }
 
-
+  if (isError) { 
+    return ( 
+      <ErrorMessage 
+        messageOne="Something went wrong :("/>
+    );
+  }
 
   return(<>
     <div className="home-container">

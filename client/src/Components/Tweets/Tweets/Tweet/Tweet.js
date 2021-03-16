@@ -1,37 +1,52 @@
 import {useEffect, useState} from 'react'; 
 import "./Tweet.css"; 
+import Spinner from "../../../Util/UI/Spinners/LoadingSpinner";
+import ErrorMessage from "../../../Util/UI/Errors/ErrorMessage";
 
 export default function Tweet({ tweet }) { 
   const [profilePicUrl, setProfilePicUrl] = useState(''); 
+  const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false); 
   const {user} = tweet; 
   const {created_at, text, retweet_count, favorite_count} = tweet; 
 
   useEffect(() => { 
+    setIsLoading(true);
     fetch(`/api/users/profile-picture?screen_name=${user.screen_name}`)
     .then(data => data.json())
     .then(response => { 
-
+      setIsLoading(false); 
       setProfilePicUrl(response);
     })
-    .catch(error => console.error(error))
+    .catch(error => { 
+      setIsLoading(false); 
+      setIsError(true); 
+    })
 
-  }, []); 
+  }, [user.screen_name]); 
 
 
   function getHoursSinceTweeted() { 
     const date = new Date(created_at); 
     const hoursSince = Math.floor((Date.now() - date.getTime()) / 3600000); 
- 
     if (hoursSince === 0) { 
       return Math.floor((Date.now() - date.getTime()) / 60000) + 'min'; 
     }
     return hoursSince + 'h'; 
   }
 
+  if (isLoading) return <Spinner />
 
+  if (isError) { 
+    return (
+      <ErrorMessage 
+      messageOne={`You have used this endpoint too much :(.`}
+      messageTwo={`Logout and come back in 10 minutes`}
+      />
+    );
+  }
 
-
-  return (  
+  return (
     <li className="tweet-container">
       <div className="user-profile-image">
         <img 
