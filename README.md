@@ -14,10 +14,14 @@ Use it [here](https://twitter-me-now.herokuapp.com/home)
 
 ## Summary
 
-Back in 2014 I was determined to become a programmer. After reading the Head First Javascript book, I wasn't sure what project to work on. I eventually landed on Tetris.
+The first CapStone Project of the SDMM program. I wanted to try to implement the Sign In with Twitter OAuth1.1a flow. I made my own custom Twitter API class that handle the OAuth1.1a specs. 
 
-It took me more than a month to work through building out all the functionality that was needed. I learned A TON about problem solving and some of the different concepts I had learned in Javascript (such as working with classes). It was challenging at times but worth every minute. :-)
+I also used React Hooks to build the client side. learning how to break up my code, keep it moduler, and use functional programming was enjoyable. 
+
+Lastly, I wanted to style it all using CSS, NO CSS frameworks. I wanted to learn to use the basics of CSS (rule declarations, specificity, cascading, etc.) to style my app because I wanted to learn how CSS works under the hood. 
+
+
 
 ## Author
 
-* **Andy Sterkowitz** - *Full-Stack Software Developer* - [Website](https://andysterkowitz.com) | [LinkedIn](https://www.linkedin.com/in/andrewsterkowitz/)
+* **Chris Detmering** - *Front End Engineer* -  [LinkedIn](https://www.linkedin.com/in/chris-detmering-1b8b9851/)
