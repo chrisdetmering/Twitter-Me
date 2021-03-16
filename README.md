@@ -10,7 +10,7 @@ Use it [here](https://twitter-me-now.herokuapp.com/home)
 
 <br>
 
-<image src="images/game_play_crop.png">
+<image src="images/twitter-me.png">
 
 ## Summary
 
