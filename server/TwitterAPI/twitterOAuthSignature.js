@@ -1,4 +1,4 @@
-require("dotenv/types").config(); 
+require("dotenv").config(); 
 const crypto = require('crypto'); 
 const percentEncode = require('./percentEncode');
 
