@@ -28,7 +28,7 @@ Requests authorized using the OAuth 1.0a method. Be careful!
 
 
 #### Search Twitter
-Search twitter and get back relavent tweets.
+Search Twitter and get back relevant tweets.
 
 ![hippo](https://media.giphy.com/media/qnSbLI79r9dvt5EYZe/giphy.gif)
   
