@@ -14,7 +14,7 @@ Note: You have to have a twitter account to sign in :)
   
 ## Features
 
-#### Sign In with Twitter
+#### Sign in with Twitter
 
 Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/authentication/guides/log-in-with-twitter) flow.
 
