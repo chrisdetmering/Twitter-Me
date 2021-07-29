@@ -34,13 +34,18 @@ Search twitter and get back relavent tweets.
 
 <iframe src="https://giphy.com/embed/qnSbLI79r9dvt5EYZe" width="480" height="250" frameBorder="0"  allowFullScreen></iframe>
   
+  
+  <figure class="video_container">
+  <iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+  
+  
+  
+  
 ## Code Examples
 
 Custom percent encode function following the [RFC 3986, Section 2.1](https://datatracker.ietf.org/doc/html/rfc3986#section-2.1) specs
 
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
 
 ```javascript
  const ASCII_CHARACTERS = [
