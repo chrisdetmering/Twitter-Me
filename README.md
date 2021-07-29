@@ -16,16 +16,16 @@ Note: You have to have a twitter account to sign in :)
 
 #### Sign In with Twitter
 
-Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/authentication/guides/log-in-with-twitter) flow 
+Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/authentication/guides/log-in-with-twitter) flow.\ 
 ![hippo](https://media.giphy.com/media/WzkEeAJTQcCeQ1p44z/giphy.gif)
 
 #### Post on behalf of users
-Can use app to post on your actual twitter account using the OAuth 1.0a method. Be careful!
+Can use app to post on your actual twitter account using the OAuth 1.0a method. Be careful!\
 ![hippo](https://media.giphy.com/media/Qy2xgc1DYKRSjXI8wy/giphy.gif)
 
 
 #### Search Twitter
-Search twitter and get back relavent tweets. 
+Search twitter and get back relavent tweets.\ 
 ![hippo](https://media.giphy.com/media/qnSbLI79r9dvt5EYZe/giphy.gif)
 
 
