@@ -32,7 +32,7 @@ Search twitter and get back relavent tweets.
 
 ![hippo](https://media.giphy.com/media/qnSbLI79r9dvt5EYZe/giphy.gif)
 
-<iframe src="https://giphy.com/embed/qnSbLI79r9dvt5EYZe" width="480" height="250" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/qnSbLI79r9dvt5EYZe">via GIPHY</a></p>
+<iframe src="https://giphy.com/embed/qnSbLI79r9dvt5EYZe" width="480" height="250" frameBorder="0"  allowFullScreen></iframe>
   
 ## Code Examples
 
