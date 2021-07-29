@@ -20,7 +20,7 @@ Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/aut
 
 #### Post to real Twitter Account
 Can use app to post on your actual twitter account using the OAuth 1.0a method.
-![hippo](https://media.giphy.com/media/rMXNpwbiXyAPkVEh5C/giphy.gif)
+![hippo](https://media.giphy.com/media/Qy2xgc1DYKRSjXI8wy/giphy.gif)
 
 
 
