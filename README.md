@@ -37,6 +37,11 @@ Search twitter and get back relavent tweets.
 ## Code Examples
 
 Custom percent encode function following the [RFC 3986, Section 2.1](https://datatracker.ietf.org/doc/html/rfc3986#section-2.1) specs
+
+<figure class="video_container">
+  <iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+
 ```javascript
  const ASCII_CHARACTERS = [
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
