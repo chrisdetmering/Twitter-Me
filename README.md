@@ -21,7 +21,7 @@ Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/aut
 ![hippo](https://media.giphy.com/media/WzkEeAJTQcCeQ1p44z/giphy.gif)
 
 #### Post on behalf of users
-Can post on YOUR actual twitter account. 
+Can post on YOUR actual twitter account.\ 
 Requests authorized using the OAuth 1.0a method. Be careful!
 
 ![hippo](https://media.giphy.com/media/Qy2xgc1DYKRSjXI8wy/giphy.gif)
