@@ -95,4 +95,4 @@ Made custom TwitterApi class to handle authorizing requests to Twitter endpoints
 
 ## Author
 
-* **Chris Detmering** - *Front End Engineer* -  [LinkedIn](https://www.linkedin.com/in/chris-detmering-1b8b9851/)
+* **Chris Detmering** - *Full Stack Engineer* -  [LinkedIn](https://www.linkedin.com/in/chris-detmering-1b8b9851/)
