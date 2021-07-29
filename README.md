@@ -1,24 +1,35 @@
-# React Twitter App 
+# Twitter Me Now
 
-<br>
+[See it live!](https://twitter-me-now.herokuapp.com/)
 
-_A Twitter Clone written using Express, React Hooks and CSS_
+Note: You have to have a twitter account to sign in :)
 
-<br>
+## Tech Stack
 
-Use it [here](https://twitter-me-now.herokuapp.com/home)
+* Node & Express
+* React Hooks
+* Twitter API v1.1
 
-<br>
 
-<image src="images/twitter-me.png">
 
-## Summary
 
-The first Capstone Project of the SDMM program. I wanted to try to implement the Sign In with Twitter OAuth1.1a flow. I made my own custom Twitter API class that handled the OAuth1.1a specs. 
+  
+## Features
 
-I also used React Hooks to build the client side. learning how to break up my code, keep it moduler, and use functional programming was enjoyable. 
+#### Sign In with Twitter
 
-Lastly, I wanted to style it all using CSS, NO CSS frameworks. I wanted to learn to use the basics of CSS (rule declarations, specificity, cascading, etc.) to style my app because I wanted to learn how CSS works under the hood. 
+Implemented the [Sign In with Twitter](https://developer.twitter.com/en/docs/authentication/guides/log-in-with-twitter) flow 
+![hippo](https://media.giphy.com/media/WzkEeAJTQcCeQ1p44z/giphy.gif)
+
+#### Post to real Twitter Account
+Can use app to post on your actual twitter account using the OAuth 1.0a method.
+![hippo](https://media.giphy.com/media/rMXNpwbiXyAPkVEh5C/giphy.gif)
+
+
+#### Error Handling
+Forms provide meaningful error handling for users. 
+All styled in CSS3, no frameworks.
+![hippo](https://media.giphy.com/media/Bx36lmJ2heUo6l1XEL/giphy.gif)
 
 
 
